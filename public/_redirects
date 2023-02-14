@@ -1,0 +1,7 @@
+# Redirects from what the browser requests to what we serve
+/               /
+/home           /src/pages/List
+/question       /src/pages/Question
+/moderation     /src/pages/moderation
+/question       /src/pages/Question
+/form           /src/pages/Form
