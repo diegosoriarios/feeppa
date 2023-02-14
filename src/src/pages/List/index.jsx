@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../../components/navbar";
 
 const POST_TYPE = {
@@ -98,7 +99,7 @@ const ListPage = () => {
       </div>
       <ul className="list-group">
         {list.map(question => (
-          <a className="text-decoration-none" href={`/${question.type.toLowerCase()}`}>
+          <Link className="text-decoration-none" href={`/${question.type.toLowerCase()}`}>
           <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
             <div>
               <p className="text-black">{question.question}</p>
@@ -106,7 +107,7 @@ const ListPage = () => {
             </div>
             <span className="badge bg-secondary badge-primary rounded-pill">{question.comments}</span>
           </li>
-          </a>
+          </Link>
         ))}
       </ul>
     </section>
