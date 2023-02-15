@@ -107,7 +107,7 @@ const ListPage = () => {
             </div>
             <span className="badge bg-secondary badge-primary rounded-pill">{question.comments}</span>
           </li>
-          </Link>
+          </a>
         ))}
       </ul>
     </section>
