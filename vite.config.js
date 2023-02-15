@@ -18,13 +18,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        list: resolve(__dirname, 'src/pages/List/index.html'),
-        form: resolve(__dirname, 'src/pages/Form/index.html'),
-        login: resolve(__dirname, 'src/pages/Login/index.html'),
-        moderation: resolve(__dirname, 'src/pages/moderation/index.html'),
-        profile: resolve(__dirname, 'src/pages/Profile/index.html'),
-        question: resolve(__dirname, 'src/pages/Question/index.html'),
+        main: path.resolve(__dirname, 'index.html'),
+        list: path.resolve(__dirname, 'src/pages/List/index.html'),
+        form: path.resolve(__dirname, 'src/pages/Form/index.html'),
+        login: path.resolve(__dirname, 'src/pages/Login/index.html'),
+        moderation: path.resolve(__dirname, 'src/pages/moderation/index.html'),
+        profile: path.resolve(__dirname, 'src/pages/Profile/index.html'),
+        question: path.resolve(__dirname, 'src/pages/Question/index.html'),
       },
     },
   },
