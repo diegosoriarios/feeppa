@@ -99,7 +99,7 @@ const ListPage = () => {
       </div>
       <ul className="list-group">
         {list.map(question => (
-          <Link className="text-decoration-none" href={`/${question.type.toLowerCase()}`}>
+          <a className="text-decoration-none" href={`/${question.type.toLowerCase()}`}>
           <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
             <div>
               <p className="text-black">{question.question}</p>
