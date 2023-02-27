@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/navbar";
-
-const POST_TYPE = {
-  QUESTION: "QUESTION",
-  CONTRIBUTION: "CONTRIBUTION",
-}
+import useFirebase from "../../hooks/useFirebase";
+import { POST_TYPE } from "../../utils/consts";
 
 const questions = [
   {id: 1, question: "Teste questão?", comments: 0, type: POST_TYPE.QUESTION},
@@ -25,6 +22,17 @@ const ListPage = () => {
   const [contributionCheckbox, setContributionCheckbox] = useState(false);
   const [search, setSearch] = useState("");
   const [list, setList] = useState(questions);
+
+  const firebase = useFirebase();
+
+  const initialize = async () => {
+    const values = await firebase.read('questions');
+    console.log(values)
+  }
+
+  useEffect(() => {
+    initialize();
+  }, [])
 
   useEffect(() => {
     if (!questionCheckbox && !contributionCheckbox) return setList(questions);
@@ -99,7 +107,7 @@ const ListPage = () => {
       </div>
       <ul className="list-group">
         {list.map(question => (
-          <a className="text-decoration-none" href={`/${question.type.toLowerCase()}`}>
+          <a className="text-decoration-none" href={`/${question.id}`}>
           <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
             <div>
               <p className="text-black">{question.question}</p>

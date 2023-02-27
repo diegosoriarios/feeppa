@@ -1,0 +1,4 @@
+export const POST_TYPE = {
+  QUESTION: "QUESTION",
+  CONTRIBUTION: "CONTRIBUTION",
+}

@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../../components/navbar';
+import UserContext from '../../context/UserContext';
+import useFirebase from '../../hooks/useFirebase';
 
 const ProfilePage = () => {
+  const [user, setUser] = useState({});
+  const { userId } = useContext(UserContext);
+  const firebase = useFirebase();
+
   const badges = [
     {id: 1, image: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp", description: "Usuário platina"},
     {id: 2, image: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp", description: "Usuário ouro"},
@@ -15,13 +21,18 @@ const ProfilePage = () => {
     {id: 10, image: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp", description: "Curador Iniciante"},
   ];
 
-  const user = {
-    contributions: 101,
-    moderation: 101,
-    questions: 0,
-    name: "Carmen Scorsatto",
-    description: "Olá",
+  const getUser =async () => {
+    console.log(userId);
+    const u = await firebase.findById('user', userId)
+    console.log(u);
+  // const userJSON = localStorage.getItem("user");
+  //   console.log(JSON.parse(userJSON))
+  //   setUser(JSON.parse(userJSON));
   }
+
+  useEffect(() => {
+    getUser();
+  }, []);
   
   return (
     <section style={{backgroundColor: '#eee'}}>
@@ -32,10 +43,10 @@ const ProfilePage = () => {
             <div className="card" style={{borderRadius: '15px'}}>
               <div className="card-body text-center">
                 <div className="mt-3 mb-4">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp" className="rounded-circle img-fluid" style={{width: '100px'}} />
+                  <img referrerpolicy="no-referrer" src={user.avatar} className="rounded-circle img-fluid" style={{width: '100px'}} />
                 </div>
-                <h4 className="mb-2">{user.name}</h4>
-                <p className="text-muted mb-4">{user.description}</p>
+                <h4 className="mb-2">{user.nome}</h4>
+                <p className="text-muted mb-4">{user.descricao}</p>
                 <div className="container mt-8">
                   <div className="row">
                     {
@@ -50,15 +61,15 @@ const ProfilePage = () => {
                 </div>
                 <div className="d-flex justify-content-between text-center mt-5 mb-2">
                   <div>
-                    <p className="mb-2 h5">{user.contributions}</p>
+                    <p className="mb-2 h5">{user.contributions || 0}</p>
                     <p className="text-muted mb-0">Contribuições</p>
                   </div>
                   <div className="px-3">
-                    <p className="mb-2 h5">{user.moderation}</p>
+                    <p className="mb-2 h5">{user.moderation || 0}</p>
                     <p className="text-muted mb-0">Curadoria</p>
                   </div>
                   <div>
-                    <p className="mb-2 h5">{user.questions}</p>
+                    <p className="mb-2 h5">{user.questions || 0}</p>
                     <p className="text-muted mb-0">Perguntas</p>
                   </div>
                 </div>
