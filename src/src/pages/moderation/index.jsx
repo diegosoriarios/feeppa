@@ -29,11 +29,12 @@ const ModerationPage = () => {
       const { values } = snapshot.data();
       items.push(values);
     });
-    console.log(items);
     setList(items);
   };
 
   const handleModeration = async () => {
+    if (selectedIndex < 0) return;
+
     const question = list[selectedIndex];
 
     const body =
@@ -68,9 +69,29 @@ const ModerationPage = () => {
             answers: [],
           };
 
+    if (body.rejeitada) 
+      return updateModeration(body);
+    
     await firebase.create("questions", body);
     navigate("/home");
   };
+
+  const updateModeration = async (item) => {
+    const doc = await firebase.findById('moderation', item.cod, 'cod');
+    console.log(doc);
+    await firebase.update('moderation', item, doc.id);
+    selectedIndex(-1);
+    handleClose();
+  }
+
+  const handleRemove = async () => {
+    const item = list[selectedIndex];
+    const doc = await firebase.findById('moderation', item.cod, 'cod');
+    
+    await firebase.remove('moderation', doc.id);
+    selectedIndex(-1);
+    handleClose();
+  }
 
   return (
     <>
@@ -91,65 +112,74 @@ const ModerationPage = () => {
             <Button variant="secondary" onClick={handleClose}>
               Voltar
             </Button>
-            <Button variant="primary" onClick={handleModeration}>
-              Rejeitar
+            {
+              list[selectedIndex].rejeitada ? (
+                <Button variant="danger" onClick={handleRemove}>
+                  Remover
+                </Button>
+              ) : (
+                <Button variant="danger" onClick={handleModeration}>
+                  Rejeitar
+                </Button>
+              )
+            }
+            <Button variant="success" onClick={handleModeration}>
+              Aprovar
             </Button>
           </Modal.Footer>
         </Modal>
       <section>
         <Navbar />
         <p>Moderation</p>
-        <ul className="list-group">
-          {list.map((question, index) => {
-            return (
-              <a className="text-decoration-none" href={`/${question.cod}`}>
-                <li
-                  className="list-group-item d-flex justify-content-between align-items-center"
-                  key={question.cod}
-                >
-                  <div>
-                    <p className="text-black">{question.titulo}</p>
-                    <span>
-                      {question.descricaoContribuicao ||
-                        question.descricaoResposta}
-                    </span>
-                    <span
-                      className={`badge badge-pill ${
-                        question.contribuicao === POST_TYPE.QUESTION
-                          ? "bg-primary"
-                          : "bg-success"
-                      } badge-primary`}
+        {
+          !!list?.length ? (
+            <ul className="list-group">
+              {list.map((question, index) => {
+                return (
+                  <a className="text-decoration-none" href={`/${question.cod}`}>
+                    <li
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                      key={question.cod}
                     >
-                      {question.contribuicao}
-                    </span>
-                  </div>
-                  <div>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setIndex(index);
-                        handleModeration();
-                      }}
-                      className="badge bg-success badge-primary rounded-pill"
-                    >
-                      Aprovar
-                    </Button>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault()
-                        setIndex(index);
-                        handleShow(true);
-                      }}
-                      className="badge bg-danger badge-primary rounded-pill"
-                    >
-                      Rejeitar
-                    </Button>
-                  </div>
-                </li>
-              </a>
-            );
-          })}
-        </ul>
+                      <div>
+                        <p className="text-black">{question.titulo}</p>
+                        <span>
+                          {question.descricaoContribuicao ||
+                            question.descricaoResposta}
+                        </span>
+                        <span
+                          className={`badge badge-pill ${
+                            question.contribuicao === POST_TYPE.QUESTION
+                              ? "bg-primary"
+                              : "bg-success"
+                          } badge-primary`}
+                        >
+                          {question.contribuicao}
+                        </span>
+                      </div>
+                      <div>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setIndex(index);
+                            handleShow(true);
+                          }}
+                          className="badge bg-success badge-primary rounded-pill"
+                        >
+                          Avaliar
+                        </Button>
+                      </div>
+                    </li>
+                  </a>
+                );
+              })}
+            </ul>
+          ) : (
+            <div>
+              Nada prara mostrar aqui
+            </div>
+          )
+        }
       </section>
     </>
   );

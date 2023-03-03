@@ -2,7 +2,9 @@ import { createContext } from "react";
 
 const UserContext = createContext({
   userId: null,
-  setUserId: () => {}
+  setUserId: () => {},
+  isModerator: false,
+  setModerator: () => {},
 });
 
 export default UserContext;

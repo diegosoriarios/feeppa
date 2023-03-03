@@ -12,6 +12,7 @@ import QuestionPage from "../pages/Question";
 export const Router = () => {
   const firebase = useFirebase();
   const [userId, setUserId] = useState(null);
+  const [isModerator, setModerator] = useState(null);
 
   useEffect(() => {
     firebase.initialize();
@@ -21,6 +22,8 @@ export const Router = () => {
     <UserContext.Provider value={{
       userId,
       setUserId,
+      isModerator,
+      setModerator
     }}
     >
       <Routes>

@@ -26,8 +26,13 @@ const ListPage = () => {
   const firebase = useFirebase();
 
   const initialize = async () => {
-    const values = await firebase.read('questions');
-    console.log(values)
+    const ref = await firebase.read("questions");
+    const items = [];
+    ref.forEach((snapshot) => {
+      const { values } = snapshot.data();
+      items.push(values);
+    });
+    setList(items);
   }
 
   useEffect(() => {
@@ -105,19 +110,27 @@ const ListPage = () => {
           </div>
         </div>
       </div>
-      <ul className="list-group">
-        {list.map(question => (
-          <a className="text-decoration-none" href={`/${question.id}`}>
-          <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
-            <div>
-              <p className="text-black">{question.question}</p>
-              <span className={`badge badge-pill ${question.type === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary`}>{question.type}</span>
-            </div>
-            <span className="badge bg-secondary badge-primary rounded-pill">{question.comments}</span>
-          </li>
-          </a>
-        ))}
-      </ul>
+      {
+        !!list?.length ? (
+          <ul className="list-group">
+            {list.map(question => (
+              <a className="text-decoration-none" href={`/${question.id}`}>
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
+                <div>
+                  <p className="text-black">{question.question}</p>
+                  <span className={`badge badge-pill ${question.type === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary`}>{question.type}</span>
+                </div>
+                <span className="badge bg-secondary badge-primary rounded-pill">{question.comments}</span>
+              </li>
+              </a>
+            ))}
+          </ul>
+        ) : (
+          <div>
+            <p>Nada para mostrar aqui</p>
+          </div>
+        )
+      }
     </section>
   );
 }

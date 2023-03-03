@@ -1,14 +1,13 @@
 import { Field, FieldArray, Form, Formik, useFormik } from "formik";
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFirebase from "../../hooks/useFirebase";
 import Navbar from "../../components/navbar";
 
 const QuestionPage = () => {
-  const [comments, setComments] = useState([]);
   const { question } = useParams();
   const firebase = useFirebase();
-  console.log(question);
+  const navigate = useNavigate();
 
   const initialValues = {
     answerSteps: [""],
@@ -17,11 +16,21 @@ const QuestionPage = () => {
 
   const handleSubmit = async (values) => {
     console.log(values);
-    firebase.update(question, {
+    const doc = await firebase.findById('moderation', question.cod, 'cod');
+
+    const comments = [...question.comments, {
       id: question,
       answerSteps,
       attachment
-    });
+    }];
+
+    const newQuestion = {
+      ...question,
+      comments,
+    };
+    
+    await firebase.update('questions', newQuestion, doc.id);
+    navigate(0);
   }
 
   return (

@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { child, get, getDatabase, ref, set } from "firebase/database";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
 import { API_KEY, APP_ID, AUTH_DOMAIN, DATABASE_URL, MESSAGING_SENDER_ID, PROJECT_ID, STORAGE_BUCKET } from "../../../env_variables";
 
@@ -68,27 +68,27 @@ export default () => {
     }
   }
 
-  const findById = async (table, id) => {
+  const findById = async (table, id, attribute = 'id') => {
     try {
       const db = getFirestore();
       const dbRef = collection(db, table);
 
-      const snapshot = query(dbRef, where('id', '==', id))
-      return snapshot;
+      const snapshot = query(dbRef, where(attribute, '==', id))
+      return (await getDoc(snapshot)).data();
     } catch (e) {
       console.log("FIND_BY_ID", e);
     }
   }
 
-  const update = (table, values) => {
-    const db = getDatabase(app);
+  const update = async (table, values, id) => {
+    try {
+      const db = getFirestore();
+      const ref = doc(db, table, id);
 
-    const newKey = push(child(ref(db), table)).key
-
-    const updates = {};
-    updates['/table/' + newKey] = values;
-
-    return update(ref(db), updates);
+      return await updateDoc(ref, values);
+    } catch (e) {
+      console.log("UPDATE_ERROR", e);
+    }
   }
 
   const remove = async (table, id) => {

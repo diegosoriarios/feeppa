@@ -9,26 +9,37 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const auth = await firebase.authentication();
+    try {
+      const auth = await firebase.authentication();
 
-    const user = {
-      id: auth.user.uid,
-      instituicao: null,
-      nome: auth.user.displayName,
-      senha: "",
-      email: auth.user.email,
-      username: auth.user.email,
-      papelCurador: false,
-      avatar: auth.user.photoURL,
-      frequenciaEmail: 0,
+      console.log(auth);
+
+      const user = {
+        id: auth.user.uid,
+        instituicao: null,
+        nome: auth.user.displayName,
+        senha: "",
+        email: auth.user.email,
+        username: auth.user.email,
+        papelCurador: false,
+        avatar: auth.user.photoURL,
+        frequenciaEmail: 0,
+      }
+      
+      localStorage.setItem("userToken", auth.token);
+      localStorage.setItem("userId", auth.user.uid);
+
+      const doc = await firebase.findById('user', auth.user.email, 'email');
+      
+      console.log(doc);
+
+      return;
+      firebase.create('user', user);
+      setUserId(auth.user.uid);
+      navigate("/home");
+    } catch (e) {
+      console.log(e);
     }
-    
-    localStorage.setItem("userToken", auth.token);
-    localStorage.setItem("userId", auth.user.uid);
-
-    firebase.create('user', user);
-    setUserId(auth.user.uid);
-    navigate("/home");
   }
 
   return (
