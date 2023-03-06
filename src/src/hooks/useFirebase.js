@@ -9,13 +9,13 @@ export default () => {
   const [app, setApp] = useState(null);
 
   const firebaseConfig = {
-    apiKey: API_KEY,
-    authDomain: AUTH_DOMAIN,
-    projectId: PROJECT_ID,
-    storageBucket: STORAGE_BUCKET,
-    messagingSenderId: MESSAGING_SENDER_ID,
-    appId: APP_ID,
-    databaseURL: DATABASE_URL,
+    apiKey: process.env.API_KEY || API_KEY,
+    authDomain: process.env.AUTH_DOMAIN || AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID ||  PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET ||  STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID ||  MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID ||  APP_ID,
+    databaseURL: process.env.DATABASE_URL ||  DATABASE_URL,
   };
   
   const initialize = () => {
@@ -74,7 +74,7 @@ export default () => {
       const dbRef = collection(db, table);
 
       const snapshot = query(dbRef, where(attribute, '==', id))
-      return (await getDoc(snapshot)).data();
+      return (await getDocs(snapshot)).data();
     } catch (e) {
       console.log("FIND_BY_ID", e);
     }
