@@ -30,27 +30,16 @@ const FormPage = () => {
     const cod = unique_id.slice(0,8)
     const userId = localStorage.getItem("userId");
 
-    const body = isQuestion ? {
+    const body = {
       cod,
-      contribuicao: isQuestion,
+      contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
       ferramenta: values.tool,
-      descricaoResposta: values.description,
-      arquivoResposta: values.attachment,
-      videoResposta: values.attachment,
-      aprovada: false,
-      rejeitada: false,
-      motivo: "",
-      titulo: values.title,
-    } : {
-      cod,
-      contribuicao: isQuestion,
-      usuario: userId,
-      ferramenta: values.tool,
-      tipoContribuicao: values.contribuitionType,
-      descricaoContribuicao: values.description,
-      linkContribuicao: values.link,
-      arquivoContribuicao: values.attachment,
+      tipoContribuicao: values.contribuitionType || "",
+      descricaoContribuicao: isQuestion ? "" : values.description,
+      descricaoResposta: isQuestion ? values.description : "",
+      arquivoResposta: values.attachment || "",
+      videoResposta: values.attachment || "",
       aprovada: false,
       rejeitada: false,
       motivo: "",
@@ -61,7 +50,7 @@ const FormPage = () => {
     navigate("/home");
   };
 
-  const QuestionForm = () => {
+  const renderQuestionForm = () => {
     return (
       <>
         <div className="form-group row my-4">
@@ -91,7 +80,7 @@ const FormPage = () => {
     );
   };
 
-  const ContribuitionForm = () => {
+  const renderContribuitionForm = () => {
     return (
       <>
         <div className="form-group row my-4">
@@ -118,6 +107,7 @@ const FormPage = () => {
           <div className="col-sm-10">
             <textarea
               name="description"
+              key="description"
               value={formik.values.description}
               onChange={formik.handleChange}
               className="form-control"
@@ -219,7 +209,7 @@ const FormPage = () => {
           </label>
         </div>
       </div>
-      {isQuestion ? <QuestionForm /> : <ContribuitionForm />}
+      {isQuestion ? renderQuestionForm() : renderContribuitionForm()}
       <button onClick={formik.handleSubmit} type="button" className="btn btn-primary">
         Adicionar post
       </button>

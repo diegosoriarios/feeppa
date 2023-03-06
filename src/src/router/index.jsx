@@ -31,7 +31,7 @@ export const Router = () => {
         <Route path="/home" element={<ListPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/moderation" element={<ModerationPage />} />
-        <Route path="/:question" element={<QuestionPage />} />
+        <Route path="/:id" element={<QuestionPage />} />
         <Route path="/form" element={<FormPage />} />
       </Routes>
     </UserContext.Provider>

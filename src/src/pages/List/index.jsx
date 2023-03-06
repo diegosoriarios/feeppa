@@ -22,6 +22,7 @@ const ListPage = () => {
   const [contributionCheckbox, setContributionCheckbox] = useState(false);
   const [search, setSearch] = useState("");
   const [list, setList] = useState(questions);
+  const [tool, setTool] = useState({});
 
   const firebase = useFirebase();
 
@@ -32,6 +33,7 @@ const ListPage = () => {
       const { values } = snapshot.data();
       items.push(values);
     });
+    console.log(items);
     setList(items);
   }
 
@@ -70,13 +72,13 @@ const ListPage = () => {
         <h2 className="">Filtro</h2>
         <div className="input-group mb-3">
           <div className="input-group-prepend">
-            <label className="input-group-text" for="inputGroupSelect01">Ferramentas</label>
+            <label className="input-group-text" htmlFor="inputGroupSelect01">Ferramentas</label>
           </div>
           <select className="custom-select" id="inputGroupSelect01">
-            <option selected>Choose...</option>
+            <option value={tool}>Choose...</option>
             {
               tools.map(tool => (
-                <option value={tool.id}>{tool.name}</option>
+                <option key={tool.id} value={tool.id}>{tool.name}</option>
               ))
             }
           </select>
@@ -91,7 +93,7 @@ const ListPage = () => {
               checked={questionCheckbox}
               onChange={() => setQuestionCheckbox(!questionCheckbox)}
               />
-            <label className="form-check-label" for="questionCheckbox">
+            <label className="form-check-label" htmlFor="questionCheckbox">
               Questão
             </label>
           </div>
@@ -104,7 +106,7 @@ const ListPage = () => {
               checked={contributionCheckbox}
               onChange={() => setContributionCheckbox(!contributionCheckbox)}
             />
-            <label className="form-check-label" for="contributionCheckbox">
+            <label className="form-check-label" htmlFor="contributionCheckbox">
               Contribuição
             </label>
           </div>
@@ -114,13 +116,13 @@ const ListPage = () => {
         !!list?.length ? (
           <ul className="list-group">
             {list.map(question => (
-              <a className="text-decoration-none" href={`/${question.id}`}>
-              <li className="list-group-item d-flex justify-content-between align-items-center" key={question.id}>
+              <a className="text-decoration-none" href={`/${question.cod}`} key={question.cod}>
+              <li className="list-group-item d-flex justify-content-between align-items-center" key={question.cod}>
                 <div>
-                  <p className="text-black">{question.question}</p>
-                  <span className={`badge badge-pill ${question.type === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary`}>{question.type}</span>
+                  <p className="text-black">{question.titulo}</p>
+                  <span className={`badge badge-pill ${question.tipoContribuicao === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary`}>{question.type}</span>
                 </div>
-                <span className="badge bg-secondary badge-primary rounded-pill">{question.comments}</span>
+                <span className="badge bg-secondary badge-primary rounded-pill">{question?.answers?.length}</span>
               </li>
               </a>
             ))}

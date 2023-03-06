@@ -68,13 +68,13 @@ export default () => {
     }
   }
 
-  const findById = async (table, id, attribute = 'id') => {
+  const find = async (table, id, attribute = 'id') => {
     try {
       const db = getFirestore();
       const dbRef = collection(db, table);
 
       const snapshot = query(dbRef, where(attribute, '==', id))
-      return (await getDocs(snapshot)).data();
+      return await getDocs(snapshot);
     } catch (e) {
       console.log("FIND_BY_ID", e);
     }
@@ -109,7 +109,7 @@ export default () => {
     create,
     read,
     update,
-    findById,
+    find,
     remove,
   };
 }

@@ -23,11 +23,11 @@ const ProfilePage = () => {
 
   const getUser =async () => {
     console.log(userId);
-    const u = await firebase.findById('user', userId)
-    console.log(u);
-  // const userJSON = localStorage.getItem("user");
-  //   console.log(JSON.parse(userJSON))
-  //   setUser(JSON.parse(userJSON));
+    const docs = await firebase.findById('user', auth.user.email, 'values.email');
+    
+    docs.forEach((doc) => {
+      setUser(doc.data().values)
+    });
   }
 
   useEffect(() => {

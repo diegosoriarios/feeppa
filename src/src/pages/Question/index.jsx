@@ -1,13 +1,33 @@
 import { Field, FieldArray, Form, Formik, useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useFirebase from "../../hooks/useFirebase";
 import Navbar from "../../components/navbar";
 
 const QuestionPage = () => {
-  const { question } = useParams();
+  const [question, setQuestion] = useState({});
+  const { id } = useParams();
   const firebase = useFirebase();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getQuestion();
+  }, [])
+  
+  const getQuestion = async () => {
+    console.log(id);
+    const docs = await firebase.find('questions', id, 'values.cod');
+    const items = [];
+
+    docs?.forEach((doc) => {
+      items.push({
+        id: doc.id,
+        ...doc.data().values,
+      })
+    });
+
+    setQuestion(items[0])
+  }
 
   const initialValues = {
     answerSteps: [""],
@@ -15,21 +35,17 @@ const QuestionPage = () => {
   };
 
   const handleSubmit = async (values) => {
-    console.log(values);
-    const doc = await firebase.findById('moderation', question.cod, 'cod');
-
-    const comments = [...question.comments, {
-      id: question,
-      answerSteps,
-      attachment
+    const answers = [...question?.answers, {
+      passos: values.answerSteps,
+      anexo: values.attachment
     }];
 
     const newQuestion = {
       ...question,
-      comments,
+      answers,
     };
     
-    await firebase.update('questions', newQuestion, doc.id);
+    await firebase.update('questions', { values: newQuestion }, question?.id);
     navigate(0);
   }
 
@@ -39,31 +55,31 @@ const QuestionPage = () => {
       <div className="col-md-12">
         <div className="bg-white comment-section">
           <div className="d-flex flex-row user p-2">
-            <img
-              className="rounded-circle"
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-              width="50"
-            />
             <div className="d-flex flex-column ml-2">
-              <span className="name font-weight-bold">Chris Hemsworth</span>
-              <span>10:30 PM, May 25</span>
+              <h3 className="name font-weight-bold">{question?.titulo}</h3>
             </div>
           </div>
           <div className="mt-2 p-2">
             <p className="comment-content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              {question?.descricaoContribuicao || question?.descricaoResposta}
             </p>
           </div>
           <div className="d-flex justify-content-between py-3 border-top">
             <span>Leave a comment</span>
             <div className="d-flex align-items-center border-left px-3 comments">
               <i className="fa fa-comment"></i>
-              <span className="ml-2">{comments.length}</span>
+              <span className="ml-2">{question?.answers?.length}</span>
             </div>
           </div>
+
+          <ul>
+              {
+                question?.answers?.map(answer => (
+                  Object.entries(answer.passos).map(key => <span>{Object.values(key[1])[0]}</span>
+                  )
+                ))
+              }
+            </ul>
 
           <h3>Descrição</h3>
           <div>
@@ -79,7 +95,7 @@ const QuestionPage = () => {
                       <>
                         <div>
                           {values.answerSteps.map((step, index) => (
-                            <div className="mb-3">
+                            <div className="mb-3" key={index}>
                               <div className="d-flex align-items-center flex-row align-middle">
                                 <label
                                   htmlFor={`answerSteps.${index}.step-${index}`}
