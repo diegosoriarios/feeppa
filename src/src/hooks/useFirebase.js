@@ -3,20 +3,33 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { child, get, getDatabase, ref, set } from "firebase/database";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
-import { API_KEY, APP_ID, AUTH_DOMAIN, DATABASE_URL, MESSAGING_SENDER_ID, PROJECT_ID, STORAGE_BUCKET } from "../../../env_variables";
+import { VITE_API_KEY, VITE_APP_ID, VITE_AUTH_DOMAIN, VITE_DATABASE_URL, VITE_MESSAGING_SENDER_ID, VITE_PROJECT_ID, VITE_STORAGE_BUCKET } from "../../../env_variables";
 
 export default () => {
   const [app, setApp] = useState(null);
+  let firebaseConfig;
 
-  const firebaseConfig = {
-    apiKey: process.env.API_KEY || API_KEY,
-    authDomain: process.env.AUTH_DOMAIN || AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID ||  PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET ||  STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID ||  MESSAGING_SENDER_ID,
-    appId: process.env.APP_ID ||  APP_ID,
-    databaseURL: process.env.DATABASE_URL ||  DATABASE_URL,
-  };
+  if (import.meta.env.DEV) {
+    firebaseConfig = {
+      apiKey: VITE_API_KEY,
+      authDomain: VITE_AUTH_DOMAIN,
+      projectId: VITE_PROJECT_ID,
+      storageBucket: VITE_STORAGE_BUCKET,
+      messagingSenderId: VITE_MESSAGING_SENDER_ID,
+      appId: VITE_APP_ID,
+      databaseURL: VITE_DATABASE_URL,
+    }
+  } else {
+    firebaseConfig = {
+      apiKey: import.meta.env.VITE_API_KEY,
+      authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+      projectId: import.meta.env.VITE_PROJECT_ID,
+      storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+      messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+      appId: import.meta.env.VITE_APP_ID,
+      databaseURL: import.meta.env.VITE_DATABASE_URL,
+    };
+  }
   
   const initialize = () => {
     const firebaseApp = initializeApp(firebaseConfig);
