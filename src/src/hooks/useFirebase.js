@@ -3,37 +3,22 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { child, get, getDatabase, ref, set } from "firebase/database";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
-import { VITE_API_KEY, VITE_APP_ID, VITE_AUTH_DOMAIN, VITE_DATABASE_URL, VITE_MESSAGING_SENDER_ID, VITE_PROJECT_ID, VITE_STORAGE_BUCKET } from "../../../env_variables";
 
 export default () => {
   const [app, setApp] = useState(null);
-  let firebaseConfig;
 
-  if (import.meta.env.DEV) {
-    firebaseConfig = {
-      apiKey: VITE_API_KEY,
-      authDomain: VITE_AUTH_DOMAIN,
-      projectId: VITE_PROJECT_ID,
-      storageBucket: VITE_STORAGE_BUCKET,
-      messagingSenderId: VITE_MESSAGING_SENDER_ID,
-      appId: VITE_APP_ID,
-      databaseURL: VITE_DATABASE_URL,
-    }
-  } else {
-    firebaseConfig = {
-      apiKey: import.meta.env.VITE_API_KEY,
-      authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_PROJECT_ID,
-      storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-      messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-      appId: import.meta.env.VITE_APP_ID,
-      databaseURL: import.meta.env.VITE_DATABASE_URL,
-    };
-  }
+  const firebaseConfig = {
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
+    databaseURL: import.meta.env.VITE_DATABASE_URL,
+  };
   
   const initialize = () => {
     const firebaseApp = initializeApp(firebaseConfig);
-    console.log(firebaseApp);
     setApp(firebaseApp);
   }
   
