@@ -12,8 +12,6 @@ const LoginPage = () => {
     try {
       const auth = await firebase.authentication();
 
-      console.log(auth);
-
       const user = {
         id: auth.user.uid,
         instituicao: null,
