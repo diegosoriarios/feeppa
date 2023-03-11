@@ -64,7 +64,8 @@ const ModerationPage = () => {
 
     if (body.rejeitada) 
       return updateModeration(body);
-    
+
+    await firebase.create("tools", body.ferramenta);
     await firebase.create("questions", body);
     navigate("/home");
   };

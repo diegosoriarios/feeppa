@@ -4,17 +4,26 @@ import { child, get, getDatabase, ref, set } from "firebase/database";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
 
+const VITE_API_KEY="AIzaSyDE4e36gfSthVe93dEJPtARjEdmc8apaks"
+const VITE_AUTH_DOMAIN="feeppa-727d7.firebaseapp.com"
+const VITE_PROJECT_ID="feeppa-727d7"
+const VITE_STORAGE_BUCKET="feeppa-727d7.appspot.com"
+const VITE_MESSAGING_SENDER_ID="400572205493"
+const VITE_APP_ID="1:400572205493:web:618d23cc32edfe1dcbb1fc"
+const VITE_DATABASE_URL="https://feeppa-727d7-default-rtdb.europe-west1.firebasedatabase.app/"
+
+
 export default () => {
   const [app, setApp] = useState(null);
 
   const firebaseConfig = {
-    apiKey: import.meta.env.VITE_API_KEY,
-    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_APP_ID,
-    databaseURL: import.meta.env.VITE_DATABASE_URL,
+    apiKey: VITE_API_KEY,
+    authDomain: VITE_AUTH_DOMAIN,
+    projectId: VITE_PROJECT_ID,
+    storageBucket: VITE_STORAGE_BUCKET,
+    messagingSenderId: VITE_MESSAGING_SENDER_ID,
+    appId: VITE_APP_ID,
+    databaseURL: VITE_DATABASE_URL,
   };
   
   const initialize = () => {

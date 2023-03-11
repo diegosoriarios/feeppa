@@ -12,16 +12,17 @@ const questions = [
   {id: 5, question: "Teste questão?", comments: 2,  type: POST_TYPE.QUESTION},
 ];
 
-const tools = [
-  {id: 1, name:"Scratch"},
-  {id: 2, name:"C"},
-];
+//const tools = [
+//  {id: 1, name:"Scratch"},
+//  {id: 2, name:"C"},
+//];
 
 const ListPage = () => {
   const [questionCheckbox, setQuestionCheckbox] = useState(false);
   const [contributionCheckbox, setContributionCheckbox] = useState(false);
   const [search, setSearch] = useState("");
   const [list, setList] = useState(questions);
+  const [tools, setTools] = useState([]);
   const [tool, setTool] = useState({});
 
   const firebase = useFirebase();
@@ -36,9 +37,25 @@ const ListPage = () => {
     console.log(items);
     setList(items);
   }
+  
+  const getTools = async () => {
+    const ref = await firebase.read("tools");
+    const items = [];
+
+    ref.forEach((snapshot) => {
+      const { values } = snapshot.data();
+      items.push({
+        id: values,
+        name: values,
+      })
+    });
+
+    setTools(items)
+  }
 
   useEffect(() => {
     initialize();
+    getTools();
   }, [])
 
   useEffect(() => {
