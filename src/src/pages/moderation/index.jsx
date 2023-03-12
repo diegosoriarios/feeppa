@@ -15,7 +15,11 @@ const ModerationPage = () => {
     setMotive("");
     setShow(false)
   };
-  const handleShow = () => setShow(true);
+  const handleShow = (index) => {
+    console.log(index);
+    if (list[index]?.motivo) setMotive(list[index]?.motivo)
+    setShow(true);
+  };
 
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -31,7 +35,7 @@ const ModerationPage = () => {
       const { values } = snapshot.data();
       items.push(values);
     });
-    console.log(items);
+
     setList(items);
   };
 
@@ -67,8 +71,20 @@ const ModerationPage = () => {
 
     await firebase.create("tools", body.ferramenta);
     await firebase.create("questions", body);
+    removeFromModerationList();
     navigate("/home");
   };
+
+  const removeFromModerationList = async () => {
+    const docs = await firebase.find('moderation', item.cod, 'values.cod');
+    const items = [];
+
+    docs.forEach((doc) => {
+      items.push(doc.id)
+    });
+
+    await firebase.remove('moderation', items[0])
+  }
 
   const updateModeration = async (item) => {
     const docs = await firebase.find('moderation', item.cod, 'values.cod');
@@ -151,6 +167,9 @@ const ModerationPage = () => {
                           {question.descricaoContribuicao ||
                             question.descricaoResposta}
                         </span>
+                        {
+                          question.motivo && <span className="text-danger">{question.motivo}</span>
+                        }
                         <span
                           className={`badge badge-pill ${
                             question.contribuicao === POST_TYPE.QUESTION
@@ -166,7 +185,7 @@ const ModerationPage = () => {
                           onClick={(e) => {
                             e.preventDefault()
                             setIndex(index);
-                            handleShow(true);
+                            handleShow(index);
                           }}
                           variant="danger"
                         >

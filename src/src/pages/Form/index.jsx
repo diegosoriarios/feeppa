@@ -1,21 +1,47 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { v4 as uuid } from 'uuid';
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import { useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 const FormPage = () => {
   const [isQuestion, setIsQuestion] = useState(true);
+  const [tools, setTools] = useState([]);
+  const [selectedTool, setSelectedTool] = useState("");
 
   const firebase = useFirebase();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    getToolList();
+  }, []);
+
+  const getToolList = async () => {
+    const ref = await firebase.read("tools");
+    const items = [];
+
+    ref.forEach((snapshot) => {
+      const { values } = snapshot.data();
+      items.push(values)
+    });
+
+    const set = Array.from(new Set(items));
+
+    const list = set.map(item => ({
+      label: item,
+      value: item,
+    }));
+
+
+    setTools(list)
+  }
+
   const formik = useFormik({
     initialValues: {
       type: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
-      tool: "",
       title: "",
       description: "",
       attachment: "",
@@ -34,7 +60,7 @@ const FormPage = () => {
       cod,
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
-      ferramenta: values.tool,
+      ferramenta: selectedTool,
       tipoContribuicao: values.contribuitionType || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
@@ -155,13 +181,15 @@ const FormPage = () => {
             Ferramenta
           </label>
           <div className="col-sm-10">
-            <input
+            <Select
+              options={tools}
+              placeholder="Selecione a Ferramenta"
+              value={selectedTool}
+              onChange={(value) => setSelectedTool(value)}
               type="text"
-              className="form-control"
               id="tool"
               name="tool"
-              value={formik.values.tool}
-              onChange={formik.handleChange}
+              isSearchable
             />
           </div>
         </div>
