@@ -30,10 +30,12 @@ const FormPage = () => {
 
     const set = Array.from(new Set(items));
 
-    const list = set.map(item => ({
+    const list = set.map((item) => ({
       label: item,
       value: item,
     }));
+
+    console.log(list);
 
 
     setTools(list)
@@ -60,7 +62,7 @@ const FormPage = () => {
       cod,
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
-      ferramenta: selectedTool,
+      ferramenta: selectedTool.value,
       tipoContribuicao: values.contribuitionType || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
