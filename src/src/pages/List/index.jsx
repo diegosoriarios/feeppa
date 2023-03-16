@@ -50,7 +50,14 @@ const ListPage = () => {
       })
     });
 
-    setTools(items)
+    const set = Array.from(new Set(items));
+
+    const list = set.map(item => ({
+      label: item,
+      value: item,
+    }));
+
+    setTools(list)
   }
 
   useEffect(() => {
