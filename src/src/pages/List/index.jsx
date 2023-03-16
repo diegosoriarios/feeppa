@@ -50,9 +50,9 @@ const ListPage = () => {
       })
     });
 
-    const set = Array.from(new Set(items));
+    const set = Array.from(new Set(items.map(i => i.id)));
 
-    const list = set.map(item => ({
+    const list = set.map((item) => ({
       label: item,
       value: item,
     }));
@@ -87,7 +87,7 @@ const ListPage = () => {
             placeholder="Search"
             aria-label="Search"
             value={search}
-            onChange={setSearch}
+            onChange={e => setSearch(e.target.value)}
           />
           <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
@@ -102,7 +102,7 @@ const ListPage = () => {
             <option value={tool}>Choose...</option>
             {
               tools.map(tool => (
-                <option key={tool.id} value={tool.id}>{tool.name}</option>
+                <option key={tool.label} value={tool.label}>{tool.label}</option>
               ))
             }
           </select>

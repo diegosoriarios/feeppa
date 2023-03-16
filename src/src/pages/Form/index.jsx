@@ -35,9 +35,6 @@ const FormPage = () => {
       value: item,
     }));
 
-    console.log(list);
-
-
     setTools(list)
   }
 

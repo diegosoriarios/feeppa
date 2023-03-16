@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
+import "./loading.css";
+
 
 const ModerationPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState([]);
   const [selectedIndex, setIndex] = useState(-1);
   const [motive, setMotive] = useState("");
@@ -58,32 +61,40 @@ const ModerationPage = () => {
     answers: [],
   })
 
-  const handleModeration = async (isApproved) => {
-    if (selectedIndex < 0) return;
+  const handleModeration = async (isApproved, index) => {
+    if (index < 0) return;
+    setIsLoading(true);
 
-    const question = list[selectedIndex];
-    console.log("QUESTION", question);
+    try {
+      const question = list[index];
+      console.log("QUESTION", question);
 
-    const body = generateBody(question, isApproved);
+      const body = generateBody(question, isApproved);
 
-    if (body.rejeitada) 
-      return updateModeration(body);
+      if (body.rejeitada) 
+        return updateModeration(body);
 
-    await firebase.create("tools", body.ferramenta);
-    await firebase.create("questions", body);
-    removeFromModerationList();
-    navigate("/home");
+      await firebase.create("tools", body.ferramenta);
+      await firebase.create("questions", body);
+      console.log(list[index].cod)
+      removeFromModerationList(list[index].cod);
+    } catch (e) {
+      setIsLoading(false);
+    }
   };
 
-  const removeFromModerationList = async () => {
-    const docs = await firebase.find('moderation', item.cod, 'values.cod');
+  const removeFromModerationList = async (id) => {
+    const docs = await firebase.find('moderation', id, 'values.cod');
     const items = [];
 
     docs.forEach((doc) => {
       items.push(doc.id)
     });
 
-    await firebase.remove('moderation', items[0])
+    console.log(items[0])
+    await firebase.remove('moderation', items[0]);
+
+    navigate("/home");
   }
 
   const updateModeration = async (item) => {
@@ -115,6 +126,16 @@ const ModerationPage = () => {
     handleClose();
   }
 
+  if (isLoading) return (
+    <section>
+        <Navbar />
+      <div className="spinner-container">
+        <div className="loading-spinner">
+        </div>
+      </div>
+    </section>
+  );
+
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -140,7 +161,7 @@ const ModerationPage = () => {
                   Remover
                 </Button>
               ) : (
-                <Button variant="danger" onClick={() => handleModeration(false)}>
+                <Button variant="danger" onClick={() => handleModeration(false, selectedIndex)}>
                   Rejeitar
                 </Button>
               )
@@ -194,7 +215,7 @@ const ModerationPage = () => {
                         <Button variant="success" onClick={(e) => {
                           e.preventDefault();
                           setIndex(index);
-                          handleModeration(true);
+                          handleModeration(true, index);
                         }}>
                           Aprovar
                         </Button>
