@@ -5,7 +5,6 @@ import useFirebase from '../../hooks/useFirebase';
 
 const ProfilePage = () => {
   const [user, setUser] = useState({});
-  const { userId } = useContext(UserContext);
   const firebase = useFirebase();
 
   const badges = [
@@ -22,10 +21,11 @@ const ProfilePage = () => {
   ];
 
   const getUser =async () => {
-    console.log(userId);
-    const docs = await firebase.findById('user', auth.user.email, 'values.email');
+    const userId = localStorage.getItem("userId");
+    const docs = await firebase.find('user', userId, 'values.id');
     
-    docs.forEach((doc) => {
+    docs?.forEach((doc) => {
+      console.log(doc.data())
       setUser(doc.data().values)
     });
   }
@@ -43,15 +43,15 @@ const ProfilePage = () => {
             <div className="card" style={{borderRadius: '15px'}}>
               <div className="card-body text-center">
                 <div className="mt-3 mb-4">
-                  <img referrerpolicy="no-referrer" src={user.avatar} className="rounded-circle img-fluid" style={{width: '100px'}} />
+                  <img referrerPolicy="no-referrer" src={user.avatar} className="rounded-circle img-fluid" style={{width: '100px'}} />
                 </div>
                 <h4 className="mb-2">{user.nome}</h4>
                 <p className="text-muted mb-4">{user.descricao}</p>
                 <div className="container mt-8">
                   <div className="row">
                     {
-                      badges.map(badge => (
-                        <div className="col-md-4">
+                      badges.map((badge, index) => (
+                        <div key={index} className="col-md-4">
                           <img style={{ width: 100 }} src={badge.image} alt={badge.description} />
                           <p>{badge.description}</p>
                         </div>  

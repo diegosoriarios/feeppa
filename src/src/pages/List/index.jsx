@@ -4,18 +4,12 @@ import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 
-const questions = [
-  {id: 1, question: "Teste questão?", comments: 0, type: POST_TYPE.QUESTION},
-  {id: 2, question: "Teste questão?", comments: 15,  type: POST_TYPE.QUESTION},
-  {id: 3, question: "Teste contribuição?", comments: 6,  type: POST_TYPE.CONTRIBUTION},
-  {id: 4, question: "Teste questão?", comments: 78,  type: POST_TYPE.QUESTION},
-  {id: 5, question: "Teste questão?", comments: 2,  type: POST_TYPE.QUESTION},
-];
-
 //const tools = [
 //  {id: 1, name:"Scratch"},
 //  {id: 2, name:"C"},
 //];
+
+let questions = [];
 
 const ListPage = () => {
   const [questionCheckbox, setQuestionCheckbox] = useState(false);
@@ -34,7 +28,9 @@ const ListPage = () => {
       const { values } = snapshot.data();
       items.push(values);
     });
-    console.log(items);
+    
+    questions = items;
+    
     setList(items);
   }
   
@@ -69,11 +65,29 @@ const ListPage = () => {
     if (!questionCheckbox && !contributionCheckbox) return setList(questions);
 
     const searchList = questions.filter(question => {
-      if (questionCheckbox && question.type === POST_TYPE.QUESTION) return question;
-      if (contributionCheckbox && question.type === POST_TYPE.CONTRIBUTION) return question;
+      if (questionCheckbox && question.contribuicao === POST_TYPE.QUESTION) return question;
+      if (contributionCheckbox && question.contribuicao === POST_TYPE.CONTRIBUTION) return question;
     })
     setList(searchList);
   }, [questionCheckbox, contributionCheckbox]);
+
+  useEffect(() => {
+    if (!search.length) return setList(questions);
+
+    const searchList = questions.filter(question => {
+      return question.titulo.includes(search);
+    })
+    setList(searchList);
+  }, [search]);
+
+  useEffect(() => {
+    if (tool === "Choose") return setList(questions);
+
+    const searchList = questions.filter(question => {
+      return question.ferramenta == tool;
+    })
+    setList(searchList);
+  }, [tool]);
 
   return (
     <section className="w-100">
@@ -98,8 +112,8 @@ const ListPage = () => {
           <div className="input-group-prepend">
             <label className="input-group-text" htmlFor="inputGroupSelect01">Ferramentas</label>
           </div>
-          <select className="custom-select" id="inputGroupSelect01">
-            <option value={tool}>Choose...</option>
+          <select onChange={e => setTool(e.target.value)} className="custom-select" id="inputGroupSelect01">
+            <option key="Choose" value="Choose">Choose...</option>
             {
               tools.map(tool => (
                 <option key={tool.label} value={tool.label}>{tool.label}</option>
