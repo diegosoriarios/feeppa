@@ -28,14 +28,16 @@ const LoginPage = () => {
       localStorage.setItem("userId", auth.user.uid);
 
       const docs = await firebase.find('user', auth.user.email, 'values.email');
-      
+
       const items = [];
 
-      docs.forEach((doc) => {
-        items.push(doc.data())
-      });
+      if (docs) {
+        docs.forEach((doc) => {
+          items.push(doc.data())
+        });
+      }
 
-      if (!items.length) firebase.create('user', user);
+      if (!docs && !items.length) firebase.create('user', user);
       setUserId(auth.user.uid);
       navigate("/home");
     } catch (e) {
