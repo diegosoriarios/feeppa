@@ -26,6 +26,7 @@ const LoginPage = () => {
       
       localStorage.setItem("userToken", auth.token);
       localStorage.setItem("userId", auth.user.uid);
+      localStorage.setItem("userName", auth.user.displayName);
 
       const docs = await firebase.find('user', auth.user.email, 'values.email');
 

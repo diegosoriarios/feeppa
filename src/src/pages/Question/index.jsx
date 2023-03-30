@@ -37,7 +37,8 @@ const QuestionPage = () => {
   const handleSubmit = async (values) => {
     const answers = [...question?.answers, {
       passos: values.answerSteps,
-      anexo: values.attachment
+      anexo: values.attachment,
+      usuario: localStorage.getItem("userName"),
     }];
 
     const newQuestion = {
@@ -72,14 +73,23 @@ const QuestionPage = () => {
             </div>
           </div>
 
-          <ul>
+          <div className="d-flex align-items-start flex-column mh-4">
               {
                 question?.answers?.map(answer => (
-                  Object.entries(answer.passos).map(key => <span>{Object.values(key[1])[0]}</span>
-                  )
+                  <div className="card w-100 m-2 p-4">
+                  <h4>{answer?.usuario}</h4>
+                  {
+                    Object.entries(answer.passos).map(key => (
+                      <span className="card-body">{Object.values(key[1])[0]}</span>
+                      )
+                    )}
+                  {
+                    answer?.anexo && <img src={answer.anexo} alt={answer.passos[0]} />
+                  }
+                  </div>
                 ))
               }
-            </ul>
+          </div>
 
           <h3>Descrição</h3>
           <div>

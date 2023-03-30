@@ -77,6 +77,7 @@ export default () => {
 
   const find = async (table, id, attribute = 'id') => {
     try {
+      const app = initializeApp(firebaseConfig);
       const db = getFirestore();
       const dbRef = collection(db, table);
 
