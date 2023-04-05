@@ -19,7 +19,6 @@ const ModerationPage = () => {
     setShow(false)
   };
   const handleShow = (index) => {
-    console.log(index);
     if (list[index]?.motivo) setMotive(list[index]?.motivo)
     setShow(true);
   };
@@ -67,7 +66,6 @@ const ModerationPage = () => {
 
     try {
       const question = list[index];
-      console.log("QUESTION", question);
 
       const body = generateBody(question, isApproved);
 
@@ -76,7 +74,7 @@ const ModerationPage = () => {
 
       await firebase.create("tools", body.ferramenta);
       await firebase.create("questions", body);
-      console.log(list[index].cod)
+
       removeFromModerationList(list[index].cod);
     } catch (e) {
       setIsLoading(false);
@@ -91,7 +89,6 @@ const ModerationPage = () => {
       items.push(doc.id)
     });
 
-    console.log(items[0])
     await firebase.remove('moderation', items[0]);
 
     navigate("/home");
@@ -105,7 +102,6 @@ const ModerationPage = () => {
       items.push(doc.id)
     });
 
-    console.log(items[0]);
 
     await firebase.update('moderation', { values: item }, items[0]);
     setIndex(-1);
@@ -177,7 +173,9 @@ const ModerationPage = () => {
             <ul className="list-group">
               {list.map((question, index) => {
                 return (
-                  <a className="text-decoration-none" href={`/${question.cod}`}>
+                  <a onClick={() => {
+                    navigate('/editForm', { state: { id: question.cod } })
+                  }} className="text-decoration-none">
                     <li
                       className="list-group-item d-flex justify-content-between align-items-center"
                       key={question.cod}

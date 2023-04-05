@@ -75,7 +75,7 @@ const ListPage = () => {
     if (!search.length) return setList(questions);
 
     const searchList = questions.filter(question => {
-      return question.titulo.includes(search);
+      return question.titulo.toLowerCase().includes(search.toLowerCase());
     })
     setList(searchList);
   }, [search]);

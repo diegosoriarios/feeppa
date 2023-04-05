@@ -8,6 +8,7 @@ import LoginPage from "../pages/Login";
 import ModerationPage from "../pages/moderation";
 import ProfilePage from "../pages/Profile";
 import QuestionPage from "../pages/Question";
+import EditForm from "../pages/EditForm";
 
 export const Router = () => {
   const firebase = useFirebase();
@@ -33,6 +34,7 @@ export const Router = () => {
         <Route path="/moderation" element={<ModerationPage />} />
         <Route path="/:id" element={<QuestionPage />} />
         <Route path="/form" element={<FormPage />} />
+        <Route path="/editForm" element={<EditForm />} />
       </Routes>
     </UserContext.Provider>
   );

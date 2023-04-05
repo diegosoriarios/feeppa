@@ -15,7 +15,6 @@ const QuestionPage = () => {
   }, [])
   
   const getQuestion = async () => {
-    console.log(id);
     const docs = await firebase.find('questions', id, 'values.cod');
     const items = [];
 
