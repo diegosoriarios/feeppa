@@ -11,6 +11,7 @@ const EditForm = () => {
   const [isQuestion, setIsQuestion] = useState(true);
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
+  const [contribuitionType, setContribuitionType] = useState("");
   const [docId, setDocId] = useState("");
 
   const { state } = useLocation();
@@ -19,8 +20,8 @@ const EditForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getInitialValues();
     getToolList();
+    getInitialValues();
   }, []);
 
   const getInitialValues = async () => {
@@ -42,8 +43,16 @@ const EditForm = () => {
       contribuitionType: values.tipoContribuicao || "",
       link: values.link || "",
     };
-
+    setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
     setDocId(items[0].id)
+    setSelectedTool({
+      values: values.ferramenta,
+      label: values.ferramenta
+    });
+    setContribuitionType({
+      values: values.tipoContribuicao,
+      label: values.tipoContribuicao,
+    });
 
     formik.setValues(initialItems, false);
   };
@@ -89,7 +98,7 @@ const EditForm = () => {
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
       ferramenta: selectedTool.value,
-      tipoContribuicao: values.contribuitionType || "",
+      tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
       arquivoResposta: values.attachment || "",
@@ -167,10 +176,12 @@ const EditForm = () => {
                 { label: "Outros", value: "Outros" },
               ]}
               placeholder="Tipo de contribuição"
-              value={formik.values.contribuitionType}
-              onChange={formik.handleChange}
-              type="text"
+              value={contribuitionType}
+              onChange={(value) => setContribuitionType(value)}
+              name="contribuitionType"
               id="contribuitionType"
+              type="text"
+              isSearchable
             />
           </div>
         </div>

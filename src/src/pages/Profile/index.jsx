@@ -25,6 +25,7 @@ const ProfilePage = () => {
     const docs = await firebase.find('user', userId, 'values.id');
     
     docs?.forEach((doc) => {
+      console.log(doc.data().values);
       setUser(doc.data().values)
     });
   }

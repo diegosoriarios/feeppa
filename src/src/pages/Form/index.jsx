@@ -11,6 +11,7 @@ const FormPage = () => {
   const [isQuestion, setIsQuestion] = useState(true);
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
+  const [contribuitionType, setContribuitionType] = useState("");
 
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const FormPage = () => {
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
       ferramenta: selectedTool.value,
-      tipoContribuicao: values.contribuitionType || "",
+      tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
       arquivoResposta: values.attachment || "",
@@ -68,6 +69,7 @@ const FormPage = () => {
       aprovada: false,
       rejeitada: false,
       motivo: "",
+      link: values.link,
       titulo: values.title,
     }
   
@@ -116,10 +118,13 @@ const FormPage = () => {
             Tipo de Contribuição
           </label>
           <div className="col-sm-10">
-            <Select
+          <Select
               options={[
                 { label: "Artigos", value: "Artigos" },
-                { label: "Exemplos de projetos", value: "Exemplos de projetos" },
+                {
+                  label: "Exemplos de projetos",
+                  value: "Exemplos de projetos",
+                },
                 { label: "Exemplo de código", value: "Exemplo de código" },
                 { label: "Metodologias", value: "Metodologias" },
                 { label: "Tutoriais", value: "Tutoriais" },
@@ -128,10 +133,12 @@ const FormPage = () => {
                 { label: "Outros", value: "Outros" },
               ]}
               placeholder="Tipo de contribuição"
-              value={formik.values.contribuitionType}
-              onChange={formik.handleChange}
-              type="text"
+              value={contribuitionType}
+              onChange={(value) => setContribuitionType(value)}
+              name="contribuitionType"
               id="contribuitionType"
+              type="text"
+              isSearchable
             />
           </div>
         </div>
