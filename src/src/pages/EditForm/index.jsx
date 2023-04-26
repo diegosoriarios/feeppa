@@ -12,6 +12,7 @@ const EditForm = () => {
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
   const [contribuitionType, setContribuitionType] = useState("");
+  const [attachment, setAttachment] = useState("");
   const [docId, setDocId] = useState("");
 
   const { state } = useLocation();
@@ -39,12 +40,12 @@ const EditForm = () => {
       title: values.titulo || "",
       description:
         values.descricaoResposta || values.descricaoContribuicao || "",
-      attachment: values.arquivoResposta || values.videoResposta || "",
       contribuitionType: values.tipoContribuicao || "",
       link: values.link || "",
     };
     setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
     setDocId(items[0].id)
+    setAttachment(values.arquivoResposta || values.videoResposta || "");
     setSelectedTool({
       values: values.ferramenta,
       label: values.ferramenta
@@ -76,12 +77,15 @@ const EditForm = () => {
     setTools(list);
   };
 
+  const handleChange = async (e) => {
+    await firebase.uploadFile(e.target.files[0], setAttachment);
+  }
+
   const formik = useFormik({
     initialValues: {
       type: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       title: "",
       description: "",
-      attachment: "",
       contribuitionType: "",
       link: "",
     },
@@ -97,11 +101,11 @@ const EditForm = () => {
       cod,
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
-      ferramenta: selectedTool.value,
+      ferramenta: selectedTool.values,
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta: values.attachment || "",
+      arquivoResposta: attachment || "",
       videoResposta: values.attachment || "",
       aprovada: false,
       rejeitada: false,
@@ -109,8 +113,8 @@ const EditForm = () => {
       titulo: values.title,
     };
 
-    await firebase.update('moderation', { values: body }, docId);
-    navigate("/home");
+    //await firebase.update('moderation', { values: body }, docId);
+    //navigate("/home");
   };
 
   const renderQuestionForm = () => {
@@ -131,19 +135,15 @@ const EditForm = () => {
           </div>
         </div>
         <div className="form-group row my-4">
-          <label htmlFor="inputPassword" className="col-sm-2 col-form-label">
+          <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
           <div className="col-sm-10">
-            <input
-              disabled
-              className="form-control"
-              name="attachment"
-              //value={formik.values.attachment}
-              onChange={formik.handleChange}
-              type="file"
-              id="formFile"
-            />
+            {
+              attachment ?
+              <img src={attachment} alt="image" style={{ width: "100px" }} />
+              : <input type="file" onChange={handleChange} accept="/image/*" />
+            }
           </div>
         </div>
       </>
@@ -219,14 +219,7 @@ const EditForm = () => {
             Arquivo ou video
           </label>
           <div className="col-sm-10">
-            <input
-              className="form-control"
-              name="attachment"
-              value={formik.values.attachment}
-              onChange={formik.handleChange}
-              type="file"
-              id="formFile"
-            />
+            <input type="file" onChange={handleChange} accept="/image/*" />
           </div>
         </div>
       </>

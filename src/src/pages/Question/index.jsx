@@ -6,6 +6,7 @@ import Navbar from "../../components/navbar";
 
 const QuestionPage = () => {
   const [question, setQuestion] = useState({});
+  const [attachment, setAttachment] = useState("");
   const { id } = useParams();
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -28,15 +29,18 @@ const QuestionPage = () => {
     setQuestion(items[0])
   }
 
+  const handleChange = async (e) => {
+    await firebase.uploadFile(e.target.files[0], setAttachment);
+  }
+
   const initialValues = {
     answerSteps: [""],
-    attachment: "",
   };
 
   const handleSubmit = async (values) => {
     const answers = [...question?.answers, {
       passos: values.answerSteps,
-      anexo: values.attachment,
+      anexo: attachment,
       usuario: localStorage.getItem("userName"),
     }];
 
@@ -48,6 +52,8 @@ const QuestionPage = () => {
     await firebase.update('questions', { values: newQuestion }, question?.id);
     navigate(0);
   }
+
+  console.log(question)
 
   return (
     <>
@@ -63,6 +69,13 @@ const QuestionPage = () => {
             <p className="comment-content">
               {question?.descricaoContribuicao || question?.descricaoResposta}
             </p>
+            {
+              question?.arquivoResposta && (
+                <p>
+                  <img src={question?.arquivoResposta} alt="image" style={{ width: "100px" }} />
+                </p>
+              )
+            }
           </div>
           <div className="d-flex justify-content-between py-3 border-top">
             <span>Leave a comment</span>
@@ -136,7 +149,7 @@ const QuestionPage = () => {
                     <label htmlFor="formFile" className="form-label">
                       Arquivo ou video
                     </label>
-                    <input className="form-control" type="file" id="formFile" />
+                    <input type="file" onChange={handleChange} accept="/image/*" />
                   </div>
                   <button
                     type="submit"

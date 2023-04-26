@@ -11,6 +11,7 @@ const FormPage = () => {
   const [isQuestion, setIsQuestion] = useState(true);
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
+  const [attachment, setAttachment] = useState("");
   const [contribuitionType, setContribuitionType] = useState("");
 
   const firebase = useFirebase();
@@ -39,12 +40,15 @@ const FormPage = () => {
     setTools(list)
   }
 
+  const handleChange = async (e) => {
+    await firebase.uploadFile(e.target.files[0], setAttachment);
+  }
+
   const formik = useFormik({
     initialValues: {
       type: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       title: "",
       description: "",
-      attachment: "",
       contribuitionType: "",
       link: "",
     },
@@ -64,8 +68,8 @@ const FormPage = () => {
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta: values.attachment || "",
-      videoResposta: values.attachment || "",
+      arquivoResposta: attachment || "",
+      videoResposta: attachment || "",
       aprovada: false,
       rejeitada: false,
       motivo: "",
@@ -99,8 +103,7 @@ const FormPage = () => {
             Arquivo ou video
           </label>
           <div className="col-sm-10">
-            <input className="form-control" name="attachment" value={formik.values.attachment}
-              onChange={formik.handleChange} type="file" id="formFile" />
+            <input type="file" onChange={handleChange} accept="/image/*" />
           </div>
         </div>
       </>
@@ -176,11 +179,7 @@ const FormPage = () => {
             Arquivo ou video
           </label>
           <div className="col-sm-10">
-            <input className="form-control" 
-              name="attachment"
-              value={formik.values.attachment}
-              onChange={formik.handleChange}
-            type="file" id="formFile" />
+          <input type="file" onChange={handleChange} accept="/image/*" />
           </div>
         </div>
       </>
