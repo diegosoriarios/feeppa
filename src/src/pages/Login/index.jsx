@@ -22,6 +22,9 @@ const LoginPage = () => {
         papelCurador: false,
         avatar: auth.user.photoURL,
         frequenciaEmail: 0,
+        contribuicoesCount: 0,
+        curadoriaCount: 0,
+        perguntasCount: 0,
       }
       
       localStorage.setItem("userToken", auth.token);

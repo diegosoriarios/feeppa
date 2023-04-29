@@ -113,8 +113,8 @@ const EditForm = () => {
       titulo: values.title,
     };
 
-    //await firebase.update('moderation', { values: body }, docId);
-    //navigate("/home");
+    await firebase.update('moderation', { values: body }, docId);
+    navigate("/home");
   };
 
   const renderQuestionForm = () => {

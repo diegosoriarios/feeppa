@@ -31,6 +31,8 @@ const ListPage = () => {
     
     questions = items;
     
+    console.log(items);
+
     setList(items);
   }
   

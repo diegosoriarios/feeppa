@@ -60,6 +60,28 @@ const ModerationPage = () => {
     answers: [],
   })
 
+  const incrementCounts = async () => {
+    const userId = localStorage.getItem("userId");
+    const docs = await firebase.find('user', userId, 'values.id');
+    
+    let values;
+    docs?.forEach((doc) => {
+      values = {
+        values: doc.data().values,
+        id: doc.id
+      };
+    });
+    const user = {...values.values};
+
+    if (!user.curadoriaCount) {
+      user.curadoriaCount = 1
+    } else {
+      user.curadoriaCount++
+    }
+    
+    await firebase.update('user', { values: user }, values.id);
+  }
+
   const handleModeration = async (isApproved, index) => {
     if (index < 0) return;
     setIsLoading(true);
@@ -72,14 +94,32 @@ const ModerationPage = () => {
       if (body.rejeitada) 
         return updateModeration(body);
 
-      await firebase.create("tools", body.ferramenta);
+      addNewToolToFirebase(body.ferramenta)
       await firebase.create("questions", body);
 
+      incrementCounts();
       removeFromModerationList(list[index].cod);
     } catch (e) {
       setIsLoading(false);
     }
   };
+
+  const addNewToolToFirebase = async (ferramenta) => {
+    const ref = await firebase.read("tools");
+    const items = [];
+
+    ref.forEach((snapshot) => {
+      const { values } = snapshot.data();
+      items.push({
+        id: values,
+        name: values,
+      })
+    });
+
+    const alreadyExists = items.filter(item => item.name === ferramenta);
+
+    if (!alreadyExists.length) await firebase.create("tools", ferramenta);
+  }
 
   const removeFromModerationList = async (id) => {
     const docs = await firebase.find('moderation', id, 'values.cod');

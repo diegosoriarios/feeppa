@@ -1,0 +1,62 @@
+type Comentarios = {
+  passos: Array<String>,
+  anexo: String,
+  usuario: Usuario,
+}
+
+type ContribuicaoType = {
+  Contribuicao: 0,
+  Duvida: 1,
+}
+
+type Contribuicao = {
+  respostas: Array<Comentarios>
+  arquivoContribuicao: String,
+  arquivoResposta: String,
+  cod: String,
+  contribuicao: ContribuicaoType,
+  descricaoContribuicao: String,
+  descricaoResposta: String,
+  ferramenta: Ferramenta,
+  linkContribuicao: String,
+  tipoContribuicao: String,
+  titulo: String,
+  usuario: Usuario,
+  videoResposta: String,
+}
+
+type Moderacao = {
+  aprovada: Boolean,
+  arquivoResposta: String,
+  cod: String,
+  contribuicao: ContribuicaoType,
+  descricaoContribuicao: String,
+  descricaoResposta: String,
+  ferramenta: Ferramenta,
+  motivo: String,
+  rejeitada: Boolean,
+  tipoContribuicao: "String",
+  titulo: String,
+  usuario: Usuario,
+  videoResposta: String,
+}
+
+type Ferramenta = {
+  nome: String,
+  cod: String,
+}
+
+type Usuario = {
+  contribuicoesCount: Number,
+  curadoriaCount: Number,
+  perguntasCount: Number,
+  avatar: String,
+  email: String,
+  frequenciaEmail: Number,
+  id: String,
+  instituicao: String,
+  nome: String,
+  papelCurador: Boolean,
+  senha: String,
+  username: String,
+}

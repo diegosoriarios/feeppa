@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useFirebase from "../../hooks/useFirebase";
 import Navbar from "../../components/navbar";
+import { POST_TYPE } from "../../utils/consts";
 
 const QuestionPage = () => {
   const [question, setQuestion] = useState({});
@@ -53,7 +54,7 @@ const QuestionPage = () => {
     navigate(0);
   }
 
-  console.log(question)
+  console.log("DIEGO", question)
 
   return (
     <>
@@ -62,18 +63,35 @@ const QuestionPage = () => {
         <div className="bg-white comment-section">
           <div className="d-flex flex-row user p-2">
             <div className="d-flex flex-column ml-2">
-              <h3 className="name font-weight-bold">{question?.titulo}</h3>
+              <h2 className="name font-weight-bold">{question?.titulo}</h2>
+              <p className="comment-content">
+                {question?.contribuicao ? "Contribuição" : "Dúvida"}
+              </p>
             </div>
           </div>
+          <h4 className="comment-content p-2">
+              Ferramenta: {question?.ferramenta}
+            </h4>
           <div className="mt-2 p-2">
-            <p className="comment-content">
-              {question?.descricaoContribuicao || question?.descricaoResposta}
-            </p>
+            {
+              (question?.descricaoContribuicao || question?.descricaoResposta) && (
+                <p className="comment-content">
+                  {question?.contribuicao === POST_TYPE.CONTRIBUTION ? question?.descricaoContribuicao : question?.descricaoResposta}
+                </p>
+              )
+            }
             {
               question?.arquivoResposta && (
                 <p>
                   <img src={question?.arquivoResposta} alt="image" style={{ width: "100px" }} />
                 </p>
+              )
+            }
+            {
+              question?.linkContribuicao && (
+                <a className="comment-content" href={question?.linkContribuicao} target="_blank">
+                  {question?.linkContribuicao}
+                </a>
               )
             }
           </div>

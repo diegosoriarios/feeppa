@@ -44,6 +44,34 @@ const FormPage = () => {
     await firebase.uploadFile(e.target.files[0], setAttachment);
   }
 
+  const incrementCounts = async () => {
+    const userId = localStorage.getItem("userId");
+    const docs = await firebase.find('user', userId, 'values.id');
+    
+    let values;
+    docs?.forEach((doc) => {
+      values = {
+        values: doc.data().values,
+        id: doc.id
+      };
+    });
+    const user = {...values.values};
+
+    if (formik.values.contribuitionType === POST_TYPE.CONTRIBUTION) {
+      if (!user.contribuicoesCount) {
+        user.contribuicoesCount = 1
+      } else
+        user.contribuicoesCount++
+    } else {
+      if (!user.perguntasCount) {
+        user.perguntasCount = 1
+      } else
+        user.perguntasCount++
+    }
+
+    await firebase.update('update', { values: user }, values.id);
+  }
+
   const formik = useFormik({
     initialValues: {
       type: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
@@ -76,6 +104,8 @@ const FormPage = () => {
       link: values.link,
       titulo: values.title,
     }
+
+    incrementCounts();
   
     await firebase.create('moderation', body);
     navigate("/home");

@@ -60,15 +60,15 @@ const ProfilePage = () => {
                 </div>
                 <div className="d-flex justify-content-between text-center mt-5 mb-2">
                   <div>
-                    <p className="mb-2 h5">{user.contributions || 0}</p>
+                    <p className="mb-2 h5">{user.contribuicoesCount || 0}</p>
                     <p className="text-muted mb-0">Contribuições</p>
                   </div>
                   <div className="px-3">
-                    <p className="mb-2 h5">{user.moderation || 0}</p>
+                    <p className="mb-2 h5">{user.curadoriaCount || 0}</p>
                     <p className="text-muted mb-0">Curadoria</p>
                   </div>
                   <div>
-                    <p className="mb-2 h5">{user.questions || 0}</p>
+                    <p className="mb-2 h5">{user.perguntasCount || 0}</p>
                     <p className="text-muted mb-0">Perguntas</p>
                   </div>
                 </div>
