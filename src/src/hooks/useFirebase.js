@@ -147,8 +147,16 @@ export default () => {
       () => {
         // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-          callback(url);
+          const type = uploadTask.snapshot.metadata.contentType;
+          const path = uploadTask.snapshot.metadata.fullPath;
+          const name = uploadTask.snapshot.metadata.name;
+          const image = {
+            url,
+            type,
+            path,
+            name
+          }
+          callback(image);
         });
       }
     );

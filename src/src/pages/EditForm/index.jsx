@@ -12,7 +12,7 @@ const EditForm = () => {
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
   const [contribuitionType, setContribuitionType] = useState("");
-  const [attachment, setAttachment] = useState("");
+  const [attachment, setAttachment] = useState({});
   const [docId, setDocId] = useState("");
 
   const { state } = useLocation();
@@ -45,7 +45,7 @@ const EditForm = () => {
     };
     setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
     setDocId(items[0].id)
-    setAttachment(values.arquivoResposta || values.videoResposta || "");
+    setAttachment(values.arquivoResposta || values.videoResposta || {});
     setSelectedTool({
       values: values.ferramenta,
       label: values.ferramenta
@@ -105,8 +105,8 @@ const EditForm = () => {
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta: attachment || "",
-      videoResposta: values.attachment || "",
+      arquivoResposta: attachment.type.includes("image") ? attachment : "",
+      videoResposta: attachment.type.includes("image") ? "" : attachment,
       aprovada: false,
       rejeitada: false,
       motivo: "",
@@ -258,6 +258,7 @@ const EditForm = () => {
                 className="form-control"
                 id="title"
                 name="title"
+                maxLength={100}
                 value={formik.values.title}
                 onChange={formik.handleChange}
               />

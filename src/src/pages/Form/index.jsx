@@ -11,7 +11,7 @@ const FormPage = () => {
   const [isQuestion, setIsQuestion] = useState(true);
   const [tools, setTools] = useState([]);
   const [selectedTool, setSelectedTool] = useState("");
-  const [attachment, setAttachment] = useState("");
+  const [attachment, setAttachment] = useState({});
   const [contribuitionType, setContribuitionType] = useState("");
 
   const firebase = useFirebase();
@@ -96,8 +96,8 @@ const FormPage = () => {
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta: attachment || "",
-      videoResposta: attachment || "",
+      arquivoResposta: attachment.type.includes("image") ? attachment : "",
+      videoResposta: attachment.type.includes("image") ? "" : attachment,
       aprovada: false,
       rejeitada: false,
       motivo: "",
@@ -248,6 +248,7 @@ const FormPage = () => {
               className="form-control"
               id="title"
               name="title"
+              maxLength={100}
               value={formik.values.title}
               onChange={formik.handleChange}
             />
