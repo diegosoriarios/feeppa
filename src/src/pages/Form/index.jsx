@@ -83,10 +83,25 @@ const FormPage = () => {
     onSubmit: (values) => handleForm(values),
   });
 
+  const handleAttachment = (type) => {
+    const attachmentIsEmpty = Object.keys(attachment).length === 0;
+
+    if (attachmentIsEmpty) return "";
+
+    const attachmentIsType = attachment.type.includes(type);
+    
+    if (!attachmentIsType) return "";
+
+    return attachment;
+  }
+
   const handleForm = async (values) => {
     const unique_id = uuid();
     const cod = unique_id.slice(0,8)
     const userId = localStorage.getItem("userId");
+    
+    const arquivoResposta = handleAttachment("image");
+    const videoResposta = handleAttachment("video");
 
     const body = {
       cod,
@@ -96,8 +111,8 @@ const FormPage = () => {
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta: attachment.type.includes("image") ? attachment : "",
-      videoResposta: attachment.type.includes("image") ? "" : attachment,
+      arquivoResposta,
+      videoResposta,
       aprovada: false,
       rejeitada: false,
       motivo: "",
