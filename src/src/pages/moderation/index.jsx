@@ -105,6 +105,9 @@ const ModerationPage = () => {
       removeFromModerationList(list[index].cod);
     } catch (e) {
       setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+      getItemsToModerate();
     }
   };
 
@@ -152,18 +155,30 @@ const ModerationPage = () => {
   };
 
   const handleRemove = async () => {
-    const item = list[selectedIndex];
-    const docs = await firebase.find("moderation", item.cod, "values.cod");
-    const items = [];
+    setIsLoading(true);
+    try {
+      const item = list[selectedIndex];
+      const docs = await firebase.find("moderation", item.cod, "values.cod");
+      const items = [];
 
-    docs.forEach((doc) => {
-      items.push(doc.id);
-    });
+      docs.forEach((doc) => {
+        items.push(doc.id);
+      });
 
-    await firebase.remove("moderation", items[0]);
-    selectedIndex(-1);
-    handleClose();
+      await firebase.remove("moderation", items[0]);
+      removeItemFromList(item.cod);
+      setIndex(-1);
+      handleClose();
+    } catch(e) {}
+    finally {
+      setIsLoading(false)
+    }
   };
+
+  const removeItemFromList = (id) => {
+    const newList = list.filter(item => item.cod !== id);
+    setList(newList);
+  }
 
   if (isLoading)
     return (
