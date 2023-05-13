@@ -6,6 +6,7 @@ import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import Uploader from "../../components/uploader";
 
 const FormPage = () => {
   const [isQuestion, setIsQuestion] = useState(true);
@@ -95,6 +96,10 @@ const FormPage = () => {
     return attachment;
   }
 
+  const handleRemove = async () => {
+    await firebase.removeFile(attachment, setAttachment);
+  }
+
   const handleForm = async (values) => {
     const unique_id = uuid();
     const cod = unique_id.slice(0,8)
@@ -147,9 +152,7 @@ const FormPage = () => {
           <label htmlFor="inputPassword" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <div className="col-sm-10">
-            <input type="file" onChange={handleChange} accept="/image/*" />
-          </div>
+          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>
       </>
     );
@@ -223,9 +226,7 @@ const FormPage = () => {
           <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <div className="col-sm-10">
-          <input type="file" onChange={handleChange} accept="/image/*" />
-          </div>
+          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>
       </>
     );

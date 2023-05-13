@@ -5,6 +5,7 @@ import useFirebase from "../../hooks/useFirebase";
 import Navbar from "../../components/navbar";
 import { POST_TYPE } from "../../utils/consts";
 import Thumbnail from "../../components/thumbnail";
+import Uploader from "../../components/uploader";
 
 const QuestionPage = () => {
   const [question, setQuestion] = useState({});
@@ -59,7 +60,9 @@ const QuestionPage = () => {
     navigate(0);
   };
 
-  console.log("DIEGO", question);
+  const handleRemove = async () => {
+    await firebase.removeFile(attachment, setAttachment);
+  }
 
   return (
     <>
@@ -165,11 +168,7 @@ const QuestionPage = () => {
                     <label htmlFor="formFile" className="form-label">
                       Arquivo ou video
                     </label>
-                    <input
-                      type="file"
-                      onChange={handleChange}
-                      accept="/image/*"
-                    />
+                    <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
                   </div>
                   <button type="submit" className="btn btn-primary">
                     Adicionar comentário

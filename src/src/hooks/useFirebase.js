@@ -5,6 +5,7 @@ import {
   getDownloadURL,
   uploadBytesResumable,
   getStorage,
+  deleteObject,
 } from "firebase/storage";
 import {
   addDoc,
@@ -162,6 +163,21 @@ export default () => {
     );
   };
 
+  const removeFile = async (file, callback) => {
+    if (!file) {
+      alert("Please choose a file first!");
+    }
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    const desertRef = ref(storage, `files/${file.name}`);
+
+    deleteObject(desertRef).then(() => {
+      callback({})
+    }).catch((e) => console.log(e));
+  }
+
   return {
     app,
     authentication,
@@ -172,5 +188,6 @@ export default () => {
     find,
     remove,
     uploadFile,
+    removeFile,
   };
 };

@@ -6,6 +6,7 @@ import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import Uploader from "../../components/uploader";
 
 const EditForm = () => {
   const [isQuestion, setIsQuestion] = useState(true);
@@ -40,7 +41,7 @@ const EditForm = () => {
       title: values.titulo || "",
       description:
         values.descricaoResposta || values.descricaoContribuicao || "",
-      contribuitionType: values.tipoContribuicao || "",
+      contribuitionType: values.tipoContribuicao,
       link: values.link || "",
     };
     setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
@@ -104,6 +105,10 @@ const EditForm = () => {
     return attachment;
   }
 
+  const handleRemove = async () => {
+    await firebase.removeFile(attachment, setAttachment);
+  }
+
   const handleForm = async (values) => {
     const unique_id = uuid();
     const cod = unique_id.slice(0, 8);
@@ -117,7 +122,7 @@ const EditForm = () => {
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
       ferramenta: selectedTool.values,
-      tipoContribuicao: contribuitionType.value || "",
+      tipoContribuicao: contribuitionType.value,
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
       arquivoResposta,
@@ -125,6 +130,7 @@ const EditForm = () => {
       aprovada: false,
       rejeitada: false,
       motivo: "",
+      link: values.link,
       titulo: values.title,
     };
 
@@ -153,13 +159,7 @@ const EditForm = () => {
           <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <div className="col-sm-10">
-            {
-              attachment ?
-              <img src={attachment} alt="image" style={{ width: "100px" }} />
-              : <input type="file" onChange={handleChange} accept="/image/*" />
-            }
-          </div>
+          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>
       </>
     );
@@ -233,9 +233,7 @@ const EditForm = () => {
           <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <div className="col-sm-10">
-            <input type="file" onChange={handleChange} accept="/image/*" />
-          </div>
+          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>
       </>
     );
