@@ -122,7 +122,7 @@ const EditForm = () => {
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
       usuario: userId,
       ferramenta: selectedTool.values,
-      tipoContribuicao: contribuitionType.value,
+      tipoContribuicao: contribuitionType.values,
       descricaoContribuicao: isQuestion ? "" : values.description,
       descricaoResposta: isQuestion ? values.description : "",
       arquivoResposta,

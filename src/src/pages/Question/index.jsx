@@ -62,120 +62,136 @@ const QuestionPage = () => {
 
   const handleRemove = async () => {
     await firebase.removeFile(attachment, setAttachment);
-  }
+  };
 
   return (
     <>
       <Navbar />
-      <div className="col-md-12">
-        <div className="bg-white comment-section">
-          <div className="d-flex flex-row user p-2">
-            <div className="d-flex flex-column ml-2">
-              <h2 className="name font-weight-bold">{question?.titulo}</h2>
-              <p className="comment-content">
-                {question?.contribuicao ? "Contribuição" : "Dúvida"}
-              </p>
-            </div>
-          </div>
-          <h4 className="comment-content p-2">
-            Ferramenta: {question?.ferramenta}
-          </h4>
-          <div className="mt-2 p-2">
-            {(question?.descricaoContribuicao ||
-              question?.descricaoResposta) && (
-              <p className="comment-content">
-                {question?.contribuicao === POST_TYPE.CONTRIBUTION
-                  ? question?.descricaoContribuicao
-                  : question?.descricaoResposta}
-              </p>
-            )}
-            <Thumbnail setIsFullScreen={setIsFullScreen} isFullScreen={isFullScreen} file={question?.arquivoResposta} />
-            {question?.linkContribuicao && (
-              <a
-                className="comment-content"
-                href={question?.linkContribuicao}
-                target="_blank"
-              >
-                {question?.linkContribuicao}
-              </a>
-            )}
-          </div>
-          <div className="d-flex justify-content-between py-3 border-top">
-            <span>Leave a comment</span>
-            <div className="d-flex align-items-center border-left px-3 comments">
-              <i className="fa fa-comment"></i>
-              <span className="ml-2">{question?.answers?.length}</span>
-            </div>
-          </div>
-
-          <div className="d-flex align-items-start flex-column mh-4">
-            {question?.answers?.map((answer) => (
-              <div className="card w-100 m-2 p-4">
-                <h4>{answer?.usuario}</h4>
-                {Object.entries(answer.passos).map((key) => (
-                  <span className="card-body">{Object.values(key[1])[0]}</span>
-                ))}
-                {answer?.anexo && (
-                  <img src={answer.anexo} alt={answer.passos[0]} />
-                )}
+      <div className="d-flex justify-content-center align-items-center">
+        <div className="col-md-8">
+          <div className="bg-white comment-section">
+            <div className="d-flex flex-row user">
+              <div className="d-flex flex-column p-2">
+              <p className="comment-content text-uppercase text-secondary m-0">
+                  {question?.contribuicao ? "Contribuição" : "Dúvida"}
+                </p>
+                <h2 className="name font-weight-bold">{question?.titulo}</h2>
               </div>
-            ))}
-          </div>
-
-          <h3>Descrição</h3>
-          <div>
-            <Formik
-              initialValues={initialValues}
-              className="d-flex m-2 row"
-              onSubmit={handleSubmit}
-            >
-              {({ values }) => (
-                <Form>
-                  <FieldArray name="answerSteps">
-                    {({ insert, remove, push }) => (
-                      <>
-                        <div>
-                          {values.answerSteps.map((step, index) => (
-                            <div className="mb-3" key={index}>
-                              <div className="d-flex align-items-center flex-row align-middle">
-                                <label
-                                  htmlFor={`answerSteps.${index}.step-${index}`}
-                                  className="form-label align-middle col-md-1"
-                                >
-                                  {index + 1} passo
-                                </label>
-                                <Field
-                                  className="form-control"
-                                  id="exampleFormControlInput1"
-                                  placeholder="Digite o passo"
-                                  name={`answerSteps.${index}.step-${index}`}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <button
-                          onClick={() => push("")}
-                          type="button"
-                          className="btn btn-primary"
-                        >
-                          Add passo
-                        </button>
-                      </>
-                    )}
-                  </FieldArray>
-                  <div className="mb-3">
-                    <label htmlFor="formFile" className="form-label">
-                      Arquivo ou video
-                    </label>
-                    <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Adicionar comentário
-                  </button>
-                </Form>
+            </div>
+            <h4 className="comment-content p-2 m-0">
+              Ferramenta: {question?.ferramenta}
+            </h4>
+            <div className="mt-2 p-2">
+              {(question?.descricaoContribuicao ||
+                question?.descricaoResposta) && (
+                <p className="comment-content">
+                  {question?.contribuicao === POST_TYPE.CONTRIBUTION
+                    ? question?.descricaoContribuicao
+                    : question?.descricaoResposta}
+                </p>
               )}
-            </Formik>
+              <Thumbnail
+                setIsFullScreen={setIsFullScreen}
+                isFullScreen={isFullScreen}
+                file={question?.arquivoResposta}
+              />
+              {question?.linkContribuicao && (
+                <a
+                  className="comment-content"
+                  href={question?.linkContribuicao}
+                  target="_blank"
+                >
+                  {question?.linkContribuicao}
+                </a>
+              )}
+            </div>
+            <div className="d-flex justify-content-between py-3 border-top">
+              <span>Leave a comment</span>
+              <div className="d-flex align-items-center border-left px-3 comments">
+                <i className="fa fa-comment"></i>
+                <span className="ml-2">{question?.answers?.length}</span>
+              </div>
+            </div>
+
+            <div className="d-flex align-items-start flex-column mh-4">
+              {question?.answers?.map((answer) => (
+                <div className="card w-100 m-2 p-4">
+                  <h4>{answer?.usuario}</h4>
+                  {Object.entries(answer.passos).map((key) => (
+                    <span className="card-body">
+                      {Object.values(key[1])[0]}
+                    </span>
+                  ))}
+                  {answer?.anexo?.type?.includes("image") && (
+                    <Thumbnail
+                    setIsFullScreen={setIsFullScreen}
+                    isFullScreen={isFullScreen}
+                    file={answer?.anexo}
+                  />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <h3 className="border-top mt-4 pt-2">Descrição</h3>
+            <div>
+              <Formik
+                initialValues={initialValues}
+                className="d-flex m-2 row"
+                onSubmit={handleSubmit}
+              >
+                {({ values }) => (
+                  <Form>
+                    <FieldArray name="answerSteps">
+                      {({ insert, remove, push }) => (
+                        <>
+                          <div>
+                            {values.answerSteps.map((step, index) => (
+                              <div className="mb-3" key={index}>
+                                <div className="d-flex align-items-center flex-row align-middle">
+                                  <label
+                                    htmlFor={`answerSteps.${index}.step-${index}`}
+                                    className="form-label align-middle col-md-1"
+                                  >
+                                    {index + 1} passo
+                                  </label>
+                                  <Field
+                                    className="form-control"
+                                    id="exampleFormControlInput1"
+                                    placeholder="Digite o passo"
+                                    name={`answerSteps.${index}.step-${index}`}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <button
+                            onClick={() => push("")}
+                            type="button"
+                            className="btn btn-primary"
+                          >
+                            Add passo
+                          </button>
+                        </>
+                      )}
+                    </FieldArray>
+                    <div className="mb-3">
+                      <label htmlFor="formFile" className="form-label">
+                        Arquivo ou video
+                      </label>
+                      <Uploader
+                        attachment={attachment}
+                        handleChange={handleChange}
+                        handleRemove={handleRemove}
+                      />
+                    </div>
+                    <button type="submit" className="btn btn-primary">
+                      Adicionar comentário
+                    </button>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </div>
         </div>
       </div>

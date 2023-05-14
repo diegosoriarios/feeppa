@@ -5,7 +5,7 @@ const Uploader = ({ attachment, handleChange, handleRemove }) => {
     return (
       <div className="col-sm-10">
         <img src={attachment.url} alt="image" style={{ width: "100px" }} className="m-2" />
-        <button type="button" onClick={handleRemove} class="btn btn-danger">
+        <button type="button" onClick={handleRemove} className="btn btn-danger">
           Apagar
         </button>
       </div>

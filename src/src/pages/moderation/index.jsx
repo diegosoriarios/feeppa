@@ -246,8 +246,10 @@ const ModerationPage = () => {
                     >
                       <p className="text-black">{question.titulo}</p>
                       <span>
-                        {question.descricaoContribuicao ||
-                          question.descricaoResposta}
+                        {(question.descricaoContribuicao ||
+                          question.descricaoResposta).length > 100 ? `${(question.descricaoContribuicao ||
+                            question.descricaoResposta).substring(0, 100)}...` : (question.descricaoContribuicao ||
+                              question.descricaoResposta)}
                       </span>
                       {question.motivo && (
                         <span className="text-danger">{question.motivo}</span>
