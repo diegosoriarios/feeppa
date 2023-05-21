@@ -70,7 +70,7 @@ const FormPage = () => {
         user.perguntasCount++
     }
 
-    await firebase.update('update', { values: user }, values.id);
+    await firebase.update('user', { values: user }, values.id);
   }
 
   const formik = useFormik({

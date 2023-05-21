@@ -140,13 +140,13 @@ const Badges = ({
         <h5 className="text-start">Você está em:</h5>
         <div className="d-flex justify-content-between text-center mt-3 mb-2">
           <div>
-            <p className="mb-2 h5">{ranking.contribuicoes}˚</p>
+            <p className="mb-2 h5">{ranking.contribuicoes}˚ lugar</p>
           </div>
           <div className="px-3">
-            <p className="mb-2 h5">{ranking.curadoria}˚</p>
+            <p className="mb-2 h5">{ranking.curadoria}˚ lugar</p>
           </div>
           <div>
-            <p className="mb-2 h5">{ranking.perguntas}˚</p>
+            <p className="mb-2 h5">{ranking.perguntas}˚ lugar</p>
           </div>
         </div>
       </div>

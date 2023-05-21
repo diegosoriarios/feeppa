@@ -95,7 +95,7 @@ const ListPage = () => {
     <section className="w-100">
       <Navbar />
       <div className="d-flex w-100 justify-content-between flex-row">
-        <h2 className="m-2">Lista</h2>
+        <h2 className="m-2">Recursos de Ajuda</h2>
         <form className="d-flex flex-row m-2 form-inline">
           <input
             className="form-control mr-sm-2"
