@@ -41,6 +41,27 @@ const QuestionPage = () => {
     answerSteps: [""],
   };
 
+  const incrementCounts = async () => {
+    const userId = localStorage.getItem("userId");
+    const docs = await firebase.find('user', userId, 'values.id');
+    
+    let values;
+    docs?.forEach((doc) => {
+      values = {
+        values: doc.data().values,
+        id: doc.id
+      };
+    });
+    const user = {...values.values};
+    
+    if (!user.perguntasCount) {
+      user.perguntasCount = 1
+    } else
+      user.perguntasCount++
+
+    await firebase.update('user', { values: user }, values.id);
+  }
+
   const handleSubmit = async (values) => {
     const answers = [
       ...question?.answers,
@@ -57,6 +78,7 @@ const QuestionPage = () => {
     };
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
+    incrementCounts();
     navigate(0);
   };
 
@@ -73,7 +95,7 @@ const QuestionPage = () => {
             <div className="d-flex flex-row user">
               <div className="d-flex flex-column p-2">
               <p className="comment-content text-uppercase text-secondary m-0">
-                  {question?.contribuicao ? "Contribuição" : "Dúvida"}
+                  {question?.contribuicao === POST_TYPE.CONTRIBUTION ? "Contribuição" : "Dúvida"}
                 </p>
                 <h2 className="name font-weight-bold">{question?.titulo}</h2>
               </div>
@@ -106,7 +128,7 @@ const QuestionPage = () => {
               )}
             </div>
             <div className="d-flex justify-content-between py-3 border-top">
-              <span>Leave a comment</span>
+              <span>Deixe um comentário</span>
               <div className="d-flex align-items-center border-left px-3 comments">
                 <i className="fa fa-comment"></i>
                 <span className="ml-2">{question?.answers?.length}</span>

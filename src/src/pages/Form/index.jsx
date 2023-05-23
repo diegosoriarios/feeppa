@@ -58,17 +58,10 @@ const FormPage = () => {
     });
     const user = {...values.values};
 
-    if (formik.values.contribuitionType === POST_TYPE.CONTRIBUTION) {
-      if (!user.contribuicoesCount) {
-        user.contribuicoesCount = 1
-      } else
-        user.contribuicoesCount++
-    } else {
-      if (!user.perguntasCount) {
-        user.perguntasCount = 1
-      } else
-        user.perguntasCount++
-    }
+    if (!user.contribuicoesCount) {
+      user.contribuicoesCount = 1
+    } else
+      user.contribuicoesCount++
 
     await firebase.update('user', { values: user }, values.id);
   }
