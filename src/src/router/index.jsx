@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createBrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import useFirebase from "../hooks/useFirebase";
 import FormPage from "../pages/Form";
@@ -20,12 +20,13 @@ export const Router = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={{
-      userId,
-      setUserId,
-      isModerator,
-      setModerator
-    }}
+    <UserContext.Provider
+      value={{
+        userId,
+        setUserId,
+        isModerator,
+        setModerator,
+      }}
     >
       <Routes>
         <Route path="/" element={<LoginPage />} />
@@ -38,4 +39,4 @@ export const Router = () => {
       </Routes>
     </UserContext.Provider>
   );
-}
+};

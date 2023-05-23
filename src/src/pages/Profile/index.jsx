@@ -141,12 +141,19 @@ const ProfilePage = () => {
     }
   };
 
+  const handleLogout = async () => {
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    navigate("/");
+  }
+
   useEffect(() => {
     getUser();
   }, []);
 
   return (
-    <section style={{ backgroundColor: "#eee" }}>
+    <section>
       <Navbar />
 
       <Modal show={show} onHide={handleCloseModal}>
@@ -167,7 +174,7 @@ const ProfilePage = () => {
             <div className="input-group-append">
               <button
                 ref={target}
-                class="btn btn-outline-secondary"
+                className="btn btn-outline-secondary"
                 type="button"
                 onClick={handleClipboardButton}
               >
@@ -203,7 +210,7 @@ const ProfilePage = () => {
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-md-12 col-xl-8">
-            <div className="card" style={{ borderRadius: "15px" }}>
+            <div className="card bg-light" style={{ borderRadius: "15px" }}>
               <div className="card-body text-center">
                 <div className="mt-3 mb-4">
                   <img
@@ -229,7 +236,7 @@ const ProfilePage = () => {
                       </Dropdown.Item>
                     )}
                     <Dropdown.Item href="#">Editar dados</Dropdown.Item>
-                    <Dropdown.Item href="#">Logout</Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}  href="#">Logout</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
                 <h4 className="mb-2">{user.nome}</h4>

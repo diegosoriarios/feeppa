@@ -95,7 +95,7 @@ const QuestionPage = () => {
             <div className="d-flex flex-row user">
               <div className="d-flex flex-column p-2">
               <p className="comment-content text-uppercase text-secondary m-0">
-                  {question?.contribuicao === POST_TYPE.CONTRIBUTION ? "Contribuição" : "Dúvida"}
+                  {question?.contribuicao === POST_TYPE.CONTRIBUTION ? "Contribuição" : "Questão"}
                 </p>
                 <h2 className="name font-weight-bold">{question?.titulo}</h2>
               </div>

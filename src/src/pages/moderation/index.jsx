@@ -8,6 +8,7 @@ import "./loading.css";
 
 const ModerationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [selectedIndex, setIndex] = useState(-1);
   const [motive, setMotive] = useState("");
@@ -25,7 +26,25 @@ const ModerationPage = () => {
   const firebase = useFirebase();
   const navigate = useNavigate();
 
+  const handlePermission = async () => {
+    const userId = localStorage.getItem("userId");
+    const docs = await firebase.find("user", userId, "values.id");
+
+    let values;
+    docs?.forEach((doc) => {
+      values = {
+        values: doc.data().values,
+        id: doc.id,
+      };
+    });
+    const user = { ...values.values };
+    setUser(user);
+
+    if (!user.papelCurador) navigate("/home");
+  }
+
   useEffect(() => {
+    handlePermission();
     getItemsToModerate();
   }, []);
 
@@ -66,18 +85,6 @@ const ModerationPage = () => {
   });
 
   const incrementCounts = async () => {
-    const userId = localStorage.getItem("userId");
-    const docs = await firebase.find("user", userId, "values.id");
-
-    let values;
-    docs?.forEach((doc) => {
-      values = {
-        values: doc.data().values,
-        id: doc.id,
-      };
-    });
-    const user = { ...values.values };
-
     if (!user.curadoriaCount) {
       user.curadoriaCount = 1;
     } else {
@@ -169,16 +176,16 @@ const ModerationPage = () => {
       removeItemFromList(item.cod);
       setIndex(-1);
       handleClose();
-    } catch(e) {}
-    finally {
-      setIsLoading(false)
+    } catch (e) {
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const removeItemFromList = (id) => {
-    const newList = list.filter(item => item.cod !== id);
+    const newList = list.filter((item) => item.cod !== id);
     setList(newList);
-  }
+  };
 
   if (isLoading)
     return (
@@ -225,14 +232,14 @@ const ModerationPage = () => {
       </Modal>
       <section>
         <Navbar />
-        <p>Moderation</p>
+        <h2 className="m-2">Curadoria</h2>
         {!!list?.length ? (
           <ul className="list-group">
             {list.map((question, index) => {
               return (
                 <div className="text-decoration-none">
                   <li
-                    className="list-group-item d-flex justify-content-between align-items-center"
+                    className="m-2 list-group-item d-flex justify-content-between align-items-center"
                     key={question.cod}
                   >
                     <a
@@ -244,25 +251,37 @@ const ModerationPage = () => {
                         navigate("/editForm", { state: { id: question.cod } });
                       }}
                     >
-                      <p className="text-black">{question.titulo}</p>
-                      <span>
-                        {(question.descricaoContribuicao ||
-                          question.descricaoResposta).length > 100 ? `${(question.descricaoContribuicao ||
-                            question.descricaoResposta).substring(0, 100)}...` : (question.descricaoContribuicao ||
-                              question.descricaoResposta)}
-                      </span>
-                      {question.motivo && (
-                        <span className="text-danger">{question.motivo}</span>
-                      )}
+                      <h4 className="text-black">{question.titulo}</h4>
                       <span
                         className={`badge badge-pill ${
                           question.contribuicao === POST_TYPE.QUESTION
                             ? "bg-primary"
                             : "bg-success"
-                        } badge-primary`}
+                        } badge-primary text-uppercase max-w-2`}
                       >
-                        {question.contribuicao}
+                        {question.contribuicao === POST_TYPE.CONTRIBUTION
+                          ? "Contribuição"
+                          : "Questão"}
                       </span>
+                      <span className="ml-2">
+                        {(
+                          question.descricaoContribuicao ||
+                          question.descricaoResposta
+                        ).length > 100
+                          ? `${(
+                              question.descricaoContribuicao ||
+                              question.descricaoResposta
+                            ).substring(0, 100)}...`
+                          : question.descricaoContribuicao ||
+                            question.descricaoResposta}
+                      </span>
+                      <div className="d-flex flex-column">
+                        {question.motivo && (
+                          <span className="text-danger mr-4">
+                            Rejeitado: {question.motivo}
+                          </span>
+                        )}
+                      </div>
                     </a>
                     <div>
                       <Button
@@ -276,6 +295,7 @@ const ModerationPage = () => {
                         Rejeitar
                       </Button>
                       <Button
+                        className="m-2"
                         variant="success"
                         onClick={(e) => {
                           e.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import useFirebase from "../../hooks/useFirebase";
@@ -7,6 +7,16 @@ const LoginPage = () => {
   const { setUserId } = useContext(UserContext);
   const firebase = useFirebase();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    handleAuth();
+  }, []);
+
+  const handleAuth = async () => {
+    const userToken = localStorage.getItem("userToken");
+  
+    if (!!userToken) navigate("/home")
+  }
 
   const handleLogin = async () => {
     try {

@@ -30,8 +30,6 @@ const ListPage = () => {
     });
     
     questions = items;
-    
-    console.log(items);
 
     setList(items);
   }
@@ -115,7 +113,7 @@ const ListPage = () => {
             <label className="input-group-text" htmlFor="inputGroupSelect01">Ferramentas</label>
           </div>
           <select onChange={e => setTool(e.target.value)} className="custom-select" id="inputGroupSelect01">
-            <option key="Choose" value="Choose">Choose...</option>
+            <option key="Choose" value="Choose">Ferramenta...</option>
             {
               tools.map(tool => (
                 <option key={tool.label} value={tool.label}>{tool.label}</option>
@@ -157,10 +155,11 @@ const ListPage = () => {
           <ul className="list-group">
             {list.map(question => (
               <a className="text-decoration-none" href={`/${question.cod}`} key={question.cod}>
-              <li className="list-group-item d-flex justify-content-between align-items-center" key={question.cod}>
+              <li className="list-group-item d-flex justify-content-between align-items-center m-2" key={question.cod}>
                 <div>
+                  <h5 className="text-black">{question.titulo}</h5>
                   <p className="text-black">{question.titulo}</p>
-                  <span className={`badge badge-pill ${question.tipoContribuicao === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary`}>{question.type}</span>
+                  <span className={`badge badge-pill ${question.contribuicao === POST_TYPE.QUESTION ? "bg-primary" : "bg-success"} badge-primary text-uppercase`}>{question.contribuicao === POST_TYPE.CONTRIBUTION ? "Contribuição" : "Questão"}</span>
                 </div>
                 <span className="badge bg-secondary badge-primary rounded-pill">{question?.answers?.length}</span>
               </li>
