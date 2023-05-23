@@ -120,7 +120,7 @@ const ProfilePage = () => {
 
     const codeIsValid = items.filter((item) => {
       const date = new Date().getTime();
-      const codeDate = new Date(item.values.validation).getTime();
+      const codeDate = new Date(item.values.validation * 1000).getTime();
       const isValid = date <= codeDate;
       return item.values.code === code && isValid;
     });
@@ -135,6 +135,7 @@ const ProfilePage = () => {
         id = doc.id
       });
       await firebase.update('user', { values: user }, id);
+      await firebase.remove('moderation_code', codeIsValid[0].id);
       navigate("/moderation");
     } else {
       setErrorMessage(true);
@@ -199,7 +200,7 @@ const ProfilePage = () => {
           </Button>
           {
             !user.papelCurador && (
-              <Button variant="secondary" onClick={checkCode}>
+              <Button variant="secondary" onClick={() => checkCode(code)}>
                 Adicionar Código
               </Button>
             )
@@ -231,7 +232,7 @@ const ProfilePage = () => {
                         Gerar item codigo de moderador
                       </Dropdown.Item>
                     ) : (
-                      <Dropdown.Item href="#">
+                      <Dropdown.Item href="#" onClick={handleShowModal}>
                         Adicionar codigo de moderador
                       </Dropdown.Item>
                     )}
