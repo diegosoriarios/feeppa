@@ -115,7 +115,7 @@ const QuestionPage = () => {
               <Thumbnail
                 setIsFullScreen={setIsFullScreen}
                 isFullScreen={isFullScreen}
-                file={question?.arquivoResposta}
+                file={question?.arquivoResposta || question?.arquivoContribuicao}
               />
               {question?.linkContribuicao && (
                 <a
