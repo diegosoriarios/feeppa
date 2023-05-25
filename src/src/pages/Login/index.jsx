@@ -51,7 +51,7 @@ const LoginPage = () => {
         });
       }
 
-      if (!docs && !items.length) firebase.create('user', user);
+      if (docs && !items.length) firebase.create('user', user);
       setUserId(auth.user.uid);
       navigate("/home");
     } catch (e) {
