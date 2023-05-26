@@ -14,9 +14,9 @@ const LoginPage = () => {
 
   const handleAuth = async () => {
     const userToken = localStorage.getItem("userToken");
-  
-    if (!!userToken) navigate("/home")
-  }
+
+    if (!!userToken) navigate("/home");
+  };
 
   const handleLogin = async () => {
     try {
@@ -35,32 +35,40 @@ const LoginPage = () => {
         contribuicoesCount: 0,
         curadoriaCount: 0,
         perguntasCount: 0,
-      }
-      
+      };
+
       localStorage.setItem("userToken", auth.token);
       localStorage.setItem("userId", auth.user.uid);
       localStorage.setItem("userName", auth.user.displayName);
 
-      const docs = await firebase.find('user', auth.user.email, 'values.email');
+      const docs = await firebase.find("user", auth.user.uid, "values.id");
 
       const items = [];
 
       if (docs) {
         docs.forEach((doc) => {
-          items.push(doc.data())
+          items.push(doc.data());
         });
       }
 
-      if (!items.length) await firebase.create('user', user);
-      setUserId(auth.user.uid);
-      navigate("/home");
+      if (!items.length) {
+        firebase.create("user", user).then(() => {
+          setUserId(auth.user.uid);
+          navigate("/home");
+        }).catch((e) => {});
+      } else {
+        setUserId(auth.user.uid);
+        navigate("/home");
+      }
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   return (
-    <a onClick={handleLogin} className="btn btn-primary">Login with google</a>
+    <a onClick={handleLogin} className="btn btn-primary">
+      Login with google
+    </a>
   );
 };
 
