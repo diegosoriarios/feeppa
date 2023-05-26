@@ -56,7 +56,11 @@ const FormPage = () => {
         id: doc.id
       };
     });
-    let user = {...values.values, contribuicoesCount: values.values.contribuicoesCount + 1};
+
+    let user;
+    if (isQuestion)
+      user = {...values.values, perguntasCount: values.values.perguntasCount + 1};
+    else user = {...values.values, contribuicoesCount: values.values.contribuicoesCount + 1};
 
     await firebase.incrementValue('user', { values: user }, values.id);
   }

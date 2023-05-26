@@ -41,22 +41,6 @@ const QuestionPage = () => {
     answerSteps: [""],
   };
 
-  const incrementCounts = async () => {
-    const userId = localStorage.getItem("userId");
-    const docs = await firebase.find('user', userId, 'values.id');
-    
-    let values;
-    docs?.forEach((doc) => {
-      values = {
-        values: doc.data().values,
-        id: doc.id
-      };
-    });
-    let user = {...values.values, perguntasCount: values.values.perguntasCount + 1};
-
-    await firebase.incrementValue('user', { values: user }, values.id);
-  }
-
   const handleSubmit = async (values) => {
     const answers = [
       ...question?.answers,
@@ -73,7 +57,6 @@ const QuestionPage = () => {
     };
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
-    incrementCounts();
     navigate(0);
   };
 
