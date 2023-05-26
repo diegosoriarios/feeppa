@@ -52,14 +52,9 @@ const QuestionPage = () => {
         id: doc.id
       };
     });
-    const user = {...values.values};
-    
-    if (!user.perguntasCount) {
-      user.perguntasCount = 1
-    } else
-      user.perguntasCount++
+    let user = {...values.values, perguntasCount: values.values.perguntasCount + 1};
 
-    await firebase.update('user', { values: user }, values.id);
+    await firebase.incrementValue('user', { values: user }, values.id);
   }
 
   const handleSubmit = async (values) => {

@@ -85,13 +85,9 @@ const ModerationPage = () => {
   });
 
   const incrementCounts = async () => {
-    if (!user.curadoriaCount) {
-      user.curadoriaCount = 1;
-    } else {
-      user.curadoriaCount++;
-    }
+    let user = {...values.values, curadoriaCount: values.values.curadoriaCount + 1};
 
-    await firebase.update("user", { values: user }, values.id);
+    await firebase.incrementValue("user", { values: user }, values.id);
   };
 
   const handleModeration = async (isApproved, index) => {

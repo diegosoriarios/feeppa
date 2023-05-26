@@ -56,14 +56,9 @@ const FormPage = () => {
         id: doc.id
       };
     });
-    const user = {...values.values};
+    let user = {...values.values, contribuicoesCount: values.values.contribuicoesCount + 1};
 
-    if (!user.contribuicoesCount) {
-      user.contribuicoesCount = 1
-    } else
-      user.contribuicoesCount++
-
-    await firebase.update('user', { values: user }, values.id);
+    await firebase.incrementValue('user', { values: user }, values.id);
   }
 
   const formik = useFormik({

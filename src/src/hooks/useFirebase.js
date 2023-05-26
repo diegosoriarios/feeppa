@@ -16,6 +16,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -116,6 +117,16 @@ export default () => {
     }
   };
 
+  const incrementValue = async (table, value, id) => {
+    try {
+      const db = getFirestore();
+      const ref = doc(db, table, id);
+      return await setDoc(ref, value, { merge: true })
+    } catch (e) {
+      console.log("SET_ERROR", e);
+    }
+  }
+
   const remove = async (table, id) => {
     try {
       const db = getFirestore();
@@ -185,6 +196,7 @@ export default () => {
     create,
     read,
     update,
+    incrementValue,
     find,
     remove,
     uploadFile,
