@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
 import UserContext from "../context/UserContext";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const { isModerator } = useContext(UserContext);
+  const location = useLocation();
+  console.log(location.pathname);
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -23,9 +26,9 @@ const Navbar = () => {
         </div>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav d-flex justify-content-end">
-            <a className="nav-link active" aria-current="page" href="/home">Lista</a>
-            <a className="nav-link" href="/profile">Perfil</a>
-            <a className="nav-link" href="/moderation">Curadoria</a>
+            <a className={`nav-link ${location.pathname === "/home" ? "active" : ""}` } aria-current="page" href="/home">Recursos de ajuda</a>
+            <a className={`nav-link ${location.pathname === "/profile" ? "active" : ""} border-start` } href="/profile">Perfil</a>
+            <a className="nav-link border-start" href="/moderation">Curadoria</a>
             <a className="nav-link btn btn-primary text-white" href="/form">Novo post</a>
           </div>
         </div>

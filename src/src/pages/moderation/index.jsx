@@ -7,7 +7,7 @@ import { POST_TYPE } from "../../utils/consts";
 import "./loading.css";
 
 const ModerationPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
   const [selectedIndex, setIndex] = useState(-1);
@@ -57,6 +57,7 @@ const ModerationPage = () => {
     });
 
     setList(items);
+    setIsLoading(false);
   };
 
   const generateBody = (question, isApproved) => ({
@@ -183,15 +184,18 @@ const ModerationPage = () => {
     setList(newList);
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <section>
+      <section className="w-100">
         <Navbar />
-        <div className="spinner-container">
-          <div className="loading-spinner"></div>
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
       </section>
     );
+  }
 
   return (
     <>
@@ -228,7 +232,7 @@ const ModerationPage = () => {
       </Modal>
       <section>
         <Navbar />
-        <h2 className="m-2">Curadoria</h2>
+        <h2 className="m-2">Área restrita para usuário Curador</h2>
         {!!list?.length ? (
           <ul className="list-group">
             {list.map((question, index) => {
@@ -308,7 +312,9 @@ const ModerationPage = () => {
             })}
           </ul>
         ) : (
-          <div>Nada prara mostrar aqui</div>
+          <div className="m-2">
+            <p>Nada prara mostrar aqui</p>
+          </div>
         )}
       </section>
     </>

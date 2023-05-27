@@ -106,7 +106,7 @@ const QuestionPage = () => {
               )}
             </div>
             <div className="d-flex justify-content-between py-3 border-top">
-              <span>Deixe um comentário</span>
+              <h2>Deixe um comentário</h2>
               <div className="d-flex align-items-center border-left px-3 comments">
                 <i className="fa fa-comment"></i>
                 <span className="ml-2">{question?.answers?.length}</span>
@@ -151,7 +151,7 @@ const QuestionPage = () => {
                                 <div className="d-flex align-items-center flex-row align-middle">
                                   <label
                                     htmlFor={`answerSteps.${index}.step-${index}`}
-                                    className="form-label align-middle col-md-1"
+                                    className="form-label align-middle col-md-1 m-2"
                                   >
                                     {index + 1} passo
                                   </label>
@@ -175,8 +175,8 @@ const QuestionPage = () => {
                         </>
                       )}
                     </FieldArray>
-                    <div className="mb-3">
-                      <label htmlFor="formFile" className="form-label">
+                    <div className="mb-3 d-flex flex-row align-items-center">
+                      <label htmlFor="formFile" className="form-label me-4 mt-2">
                         Arquivo ou video
                       </label>
                       <Uploader

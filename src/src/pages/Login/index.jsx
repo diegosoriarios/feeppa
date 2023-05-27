@@ -66,9 +66,11 @@ const LoginPage = () => {
   };
 
   return (
-    <a onClick={handleLogin} className="btn btn-primary">
-      Login with google
-    </a>
+    <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+      <a onClick={handleLogin} className="btn btn-primary">
+        Acessar com o Google
+      </a>
+    </div>
   );
 };
 

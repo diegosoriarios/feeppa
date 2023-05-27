@@ -227,6 +227,12 @@ const FormPage = () => {
   return (
     <>
     <Navbar />
+    <div className="d-flex justify-content-center m-2">
+      <h2>Conteúdos</h2>
+    </div>
+
+    <hr className="h4" />
+
     <form className="p-4">
       <div>
         <div className="form-group row my-4">
