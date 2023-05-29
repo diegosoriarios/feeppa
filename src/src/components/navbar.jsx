@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 const Navbar = () => {
   const { isModerator } = useContext(UserContext);
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">

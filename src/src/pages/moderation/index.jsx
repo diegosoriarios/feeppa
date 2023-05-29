@@ -37,7 +37,8 @@ const ModerationPage = () => {
         id: doc.id,
       };
     });
-    const user = { ...values.values };
+
+    const user = { ...values.values, doc: values.id };
     setUser(user);
 
     if (!user.papelCurador) navigate("/home");
@@ -86,9 +87,9 @@ const ModerationPage = () => {
   });
 
   const incrementCounts = async () => {
-    let user = {...values.values, curadoriaCount: values.values.curadoriaCount + 1};
-
-    await firebase.incrementValue("user", { values: user }, values.id);
+    let values = {...user, curadoriaCount: user.curadoriaCount + 1};
+    
+    await firebase.incrementValue("user", { values }, user.doc);
   };
 
   const handleModeration = async (isApproved, index) => {
