@@ -1,13 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import Badges from "../../components/badges";
-import { v4 as uuidv4 } from "uuid";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard, faGear } from "@fortawesome/free-solid-svg-icons";
-import Dropdown from "react-bootstrap/Dropdown";
-import { Button, Modal, Overlay, Tooltip } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 
 const ProfilePage = () => {

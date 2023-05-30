@@ -242,8 +242,11 @@ const EditForm = () => {
   return (
     <>
       <Navbar />
-      <div className="d-flex justify-content-center m-2">
+      <div className="d-flex flex-column text-align-center align-items-center justify-content-center m-2">
         <h2>Curadoria: verificação de conteúdo</h2>
+        <p>
+          Analise o conteúdo/questão e, se necessário, faça as devidas alterações
+        </p>
       </div>
 
       <hr className="h4" />
@@ -311,6 +314,7 @@ const EditForm = () => {
             </label>
           </div>
         </div>
+        <p>Descreva sua dúvida e, se desejar, insira um arquivo de apoio (imagem, video, etc)</p>
         {isQuestion ? renderQuestionForm() : renderContribuitionForm()}
         <button
           onClick={formik.handleSubmit}

@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import Loading from "../../components/loading";
-
-//const tools = [
-//  {id: 1, name:"Scratch"},
-//  {id: 2, name:"C"},
-//];
 
 let questions = [];
 
@@ -66,28 +61,23 @@ const ListPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!questionCheckbox && !contributionCheckbox) return setList(questions);
+    if (!questionCheckbox && !contributionCheckbox && !search.length) return setList(questions);
 
-    const searchList = questions.filter((question) => {
-      if (questionCheckbox && question.contribuicao === POST_TYPE.QUESTION)
-        return question;
-      if (
-        contributionCheckbox &&
-        question.contribuicao === POST_TYPE.CONTRIBUTION
-      )
-        return question;
-    });
-    setList(searchList);
-  }, [questionCheckbox, contributionCheckbox]);
-
-  useEffect(() => {
-    if (!search.length) return setList(questions);
-
-    const searchList = questions.filter((question) => {
+    const searchLabelText = !search.length ? questions : questions.filter((question) => {
       return question.titulo.toLowerCase().includes(search.toLowerCase());
     });
-    setList(searchList);
-  }, [search]);
+
+    const questionSearchList = !questionCheckbox ? searchLabelText : searchLabelText.filter((question) => 
+      questionCheckbox && question.contribuicao === POST_TYPE.QUESTION
+    )
+
+    const contribuitionSearchList = !contributionCheckbox ? questionSearchList : questionSearchList.filter((question) => 
+      contributionCheckbox &&
+      question.contribuicao === POST_TYPE.CONTRIBUTION
+    )
+  
+    setList(contribuitionSearchList);
+  }, [questionCheckbox, contributionCheckbox, search]);
 
   useEffect(() => {
     if (tool === "Choose") return setList(questions);

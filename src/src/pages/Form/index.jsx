@@ -227,8 +227,9 @@ const FormPage = () => {
   return (
     <>
     <Navbar />
-    <div className="d-flex justify-content-center m-2">
+    <div className="d-flex flex-column text-align-center align-items-center justify-content-center m-2">
       <h2>Novo conteúdo</h2>
+      <p>Para inserir um novo conteúdo indique a ferramenta associada, um título que represente o que será apresentado e se é uma dúvida ou contribuição</p>
     </div>
 
     <hr className="h4" />
@@ -297,6 +298,7 @@ const FormPage = () => {
           </label>
         </div>
       </div>
+      <p>Descreva sua dúvida e, se desejar, insira um arquivo de apoio (imagem, video, etc)</p>
       {isQuestion ? renderQuestionForm() : renderContribuitionForm()}
       <button onClick={formik.handleSubmit} type="button" className="btn btn-primary">
         Inserir conteúdo

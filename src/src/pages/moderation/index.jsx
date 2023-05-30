@@ -43,7 +43,7 @@ const ModerationPage = () => {
     setUser(user);
 
     if (!user.papelCurador) navigate("/home");
-  }
+  };
 
   useEffect(() => {
     handlePermission();
@@ -88,8 +88,8 @@ const ModerationPage = () => {
   });
 
   const incrementCounts = async () => {
-    let values = {...user, curadoriaCount: user.curadoriaCount + 1};
-    
+    let values = { ...user, curadoriaCount: user.curadoriaCount + 1 };
+
     await firebase.incrementValue("user", { values }, user.doc);
   };
 
@@ -186,7 +186,7 @@ const ModerationPage = () => {
     setList(newList);
   };
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -223,7 +223,16 @@ const ModerationPage = () => {
       </Modal>
       <section>
         <Navbar />
-        <h2 className="m-2">Curadoria</h2>
+        <div className="d-flex flex-column text-align-center align-items-center justify-content-center m-2">
+          <h2 className="m-2">Curadoria</h2>
+          <p>
+            Analise os conteúdos inseridos e Aprove ou não a disponibilização
+            dos mesmos para a comunidade
+          </p>
+          <p>
+            Clique no título para verificar o detalhamento do conteúdo/questão
+          </p>
+        </div>
         {!!list?.length ? (
           <ul className="list-group">
             {list.map((question, index) => {

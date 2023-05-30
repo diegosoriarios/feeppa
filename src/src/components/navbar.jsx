@@ -1,9 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, useHref, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Dropdown, Modal, Overlay, Tooltip } from "react-bootstrap";
-import { faClipboard, faGear } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
+import useFirebase from "../hooks/useFirebase";
+import { v4 as uuidv4 } from "uuid";
 
 const Navbar = () => {
   const target = useRef(null);
@@ -16,6 +18,7 @@ const Navbar = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const firebase = useFirebase();
 
   useEffect(() => {
     checkLogin();
@@ -118,10 +121,10 @@ const Navbar = () => {
     <>
       <Modal show={show} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Código de moderador</Modal.Title>
+          <Modal.Title>Código de curador</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Diga o motivo para rejeitar a contribuição</p>
+          <p>Adicione o código de curador.</p>
 
           <div className="input-group">
             <input
@@ -227,11 +230,11 @@ const Navbar = () => {
                 <Dropdown.Menu>
                   {user?.papelCurador ? (
                     <Dropdown.Item href="#" onClick={handleShowModal}>
-                      Gerar item codigo de moderador
+                      Gerar item codigo de curador
                     </Dropdown.Item>
                   ) : (
                     <Dropdown.Item href="#" onClick={handleShowModal}>
-                      Adicionar codigo de moderador
+                      Adicionar codigo de curador
                     </Dropdown.Item>
                   )}
                   <Dropdown.Item href="#" onClick={() => navigate("/profile")}>
