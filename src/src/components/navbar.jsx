@@ -29,7 +29,7 @@ const Navbar = () => {
   }
 
   const handleShowModal = () => {
-    if (!!user?.papelCurador) generateRandomCode();
+    if (user?.papelCurador) generateRandomCode();
     setShow(true);
   };
 
@@ -58,7 +58,7 @@ const Navbar = () => {
   const handleCloseModal = () => setShow(false);
 
   const handleClipboardButton = async () => {
-    if (!!user?.papelCurador) {
+    if (user?.papelCurador) {
       navigator.clipboard.writeText(code);
       setShowTooltip(true);
       setTimeout(() => {
@@ -112,6 +112,8 @@ const Navbar = () => {
     }
   };
 
+  if (!user) return <></>;
+
   return (
     <>
       <Modal show={show} onHide={handleCloseModal}>
@@ -126,7 +128,7 @@ const Navbar = () => {
               type="text"
               className="form-control"
               value={code}
-              disabled={!!user?.papelCurador}
+              disabled={user?.papelCurador}
               onChange={(e) => setCode(e.target.value)}
             />
             <div className="input-group-append">
@@ -141,7 +143,7 @@ const Navbar = () => {
               <Overlay target={target.current} show={show} placement="right">
                 {(props) => (
                   <Tooltip id="overlay-example" {...props}>
-                    {!!user?.papelCurador
+                    {user?.papelCurador
                       ? "Item copiado para o clipboard"
                       : "Código colado"}
                   </Tooltip>
@@ -223,7 +225,7 @@ const Navbar = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  {!!user?.papelCurador ? (
+                  {user?.papelCurador ? (
                     <Dropdown.Item href="#" onClick={handleShowModal}>
                       Gerar item codigo de moderador
                     </Dropdown.Item>
