@@ -17,6 +17,17 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    checkLogin();
+  }, []);
+
+  const checkLogin = async () => {
+    const userId = localStorage.getItem("userId");
+    if (!user & !!userId) {
+      handleLogout();
+    }
+  }
+
   const handleShowModal = () => {
     if (user?.papelCurador) generateRandomCode();
     setShow(true);
