@@ -1,10 +1,12 @@
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import UserContext from "../../context/UserContext";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useFirebase from "../../hooks/useFirebase";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../../slice/authSlice";
 
 const LoginPage = () => {
-  const { setUserId } = useContext(UserContext);
+  const dispatch = useDispatch()
+
   const firebase = useFirebase();
   const navigate = useNavigate();
 
@@ -53,11 +55,12 @@ const LoginPage = () => {
 
       if (!items.length) {
         firebase.create("user", user).then(() => {
-          setUserId(auth.user.uid);
+          dispatch(saveUser(user));
           navigate("/home");
         }).catch((e) => {});
       } else {
-        setUserId(auth.user.uid);
+        console.log(items);
+        dispatch(saveUser(items[0].values));
         navigate("/home");
       }
     } catch (e) {
@@ -67,9 +70,9 @@ const LoginPage = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
-      <a onClick={handleLogin} className="btn btn-primary">
+      <Link onClick={handleLogin} className="btn btn-primary">
         Acessar com o Google
-      </a>
+      </Link>
     </div>
   );
 };

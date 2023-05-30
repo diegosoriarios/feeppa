@@ -228,7 +228,7 @@ const FormPage = () => {
     <>
     <Navbar />
     <div className="d-flex justify-content-center m-2">
-      <h2>Conteúdos</h2>
+      <h2>Novo conteúdo</h2>
     </div>
 
     <hr className="h4" />
@@ -299,7 +299,7 @@ const FormPage = () => {
       </div>
       {isQuestion ? renderQuestionForm() : renderContribuitionForm()}
       <button onClick={formik.handleSubmit} type="button" className="btn btn-primary">
-        Adicionar post
+        Inserir conteúdo
       </button>
     </form>
     </>

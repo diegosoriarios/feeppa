@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createBrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import UserContext from "../context/UserContext";
 import useFirebase from "../hooks/useFirebase";
 import FormPage from "../pages/Form";
 import ListPage from "../pages/List";
@@ -20,23 +19,14 @@ export const Router = () => {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{
-        userId,
-        setUserId,
-        isModerator,
-        setModerator,
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/home" element={<ListPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/moderation" element={<ModerationPage />} />
-        <Route path="/:id" element={<QuestionPage />} />
-        <Route path="/form" element={<FormPage />} />
-        <Route path="/editForm" element={<EditForm />} />
-      </Routes>
-    </UserContext.Provider>
+    <Routes>
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/home" element={<ListPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/moderation" element={<ModerationPage />} />
+      <Route path="/:id" element={<QuestionPage />} />
+      <Route path="/form" element={<FormPage />} />
+      <Route path="/editForm" element={<EditForm />} />
+    </Routes>
   );
 };

@@ -5,6 +5,7 @@ import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import "./loading.css";
+import Loading from "../../components/loading";
 
 const ModerationPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -185,18 +186,7 @@ const ModerationPage = () => {
     setList(newList);
   };
 
-  if (isLoading) {
-    return (
-      <section className="w-100">
-        <Navbar />
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  if (isLoading) return <Loading />
 
   return (
     <>
@@ -233,7 +223,7 @@ const ModerationPage = () => {
       </Modal>
       <section>
         <Navbar />
-        <h2 className="m-2">Área restrita para usuário Curador</h2>
+        <h2 className="m-2">Curadoria</h2>
         {!!list?.length ? (
           <ul className="list-group">
             {list.map((question, index) => {

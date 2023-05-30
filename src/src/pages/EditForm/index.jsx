@@ -242,6 +242,11 @@ const EditForm = () => {
   return (
     <>
       <Navbar />
+      <div className="d-flex justify-content-center m-2">
+        <h2>Curadoria: verificação de conteúdo</h2>
+      </div>
+
+      <hr className="h4" />
       <form className="p-4">
         <div>
           <div className="form-group row my-4">

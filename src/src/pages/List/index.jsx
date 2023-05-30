@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
+import Loading from "../../components/loading";
 
 //const tools = [
 //  {id: 1, name:"Scratch"},
@@ -21,6 +22,7 @@ const ListPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const firebase = useFirebase();
+  const navigate = useNavigate();
 
   const initialize = async () => {
     const ref = await firebase.read("questions");
@@ -96,18 +98,7 @@ const ListPage = () => {
     setList(searchList);
   }, [tool]);
 
-  if (isLoading) {
-    return (
-      <section className="w-100">
-        <Navbar />
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  if (isLoading) return <Loading />
 
   return (
     <section className="w-100">
@@ -198,7 +189,8 @@ const ListPage = () => {
             {list.map((question) => (
               <a
                 className="text-decoration-none"
-                href={`/${question.cod}`}
+                href="#"
+                onClick={() => navigate(`/${question.cod}`)}
                 key={question.cod}
               >
                 <li
