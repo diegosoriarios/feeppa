@@ -1,142 +1,42 @@
-import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
+import React, { useEffect } from "react";
 import Navbar from "../../components/navbar";
-import useFirebase from "../../hooks/useFirebase";
-import { POST_TYPE } from "../../utils/consts";
-import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Uploader from "../../components/uploader";
+import { useEditForm } from "./useEditForm";
+import { Button, Modal } from "react-bootstrap";
+import { useModeration } from "./useModeration";
 
 const EditForm = () => {
-  const [isQuestion, setIsQuestion] = useState(true);
-  const [tools, setTools] = useState([]);
-  const [selectedTool, setSelectedTool] = useState("");
-  const [contribuitionType, setContribuitionType] = useState("");
-  const [attachment, setAttachment] = useState({});
-  const [docId, setDocId] = useState("");
+  const {
+    isQuestion,
+    tools,
+    selectedTool,
+    contribuitionType,
+    attachment,
+    formik,
+    setContribuitionType,
+    setSelectedTool,
+    setIsQuestion,
+    getInitialValues,
+    getToolList,
+    handleChange,
+    handleRemove,
+    getBody,
+  } = useEditForm();
 
-  const { state } = useLocation();
-
-  const firebase = useFirebase();
-  const navigate = useNavigate();
+  const {
+    motive,
+    setMotive,
+    show,
+    handleShow,
+    handleModeration,
+    handleClose,
+  } = useModeration(getBody(formik.values));
 
   useEffect(() => {
     getToolList();
     getInitialValues();
   }, []);
-
-  const getInitialValues = async () => {
-    const docs = await firebase.find("moderation", state.id, "values.cod");
-    const items = [];
-
-    docs.forEach((doc) => {
-      items.push({id: doc.id, data:doc.data()});
-    });
-
-    const values = items[0].data.values;
-
-    const initialItems = {
-      type: values.contribuicao || "",
-      title: values.titulo || "",
-      description:
-        values.descricaoResposta || values.descricaoContribuicao || "",
-      contribuitionType: values.tipoContribuicao,
-      link: values.link || "",
-    };
-    setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
-    setDocId(items[0].id)
-    setAttachment(values.arquivoResposta || values.videoResposta || {});
-    setSelectedTool({
-      values: values.ferramenta,
-      label: values.ferramenta
-    });
-    setContribuitionType({
-      values: values.tipoContribuicao,
-      label: values.tipoContribuicao,
-    });
-
-    formik.setValues(initialItems, false);
-  };
-
-  const getToolList = async () => {
-    const ref = await firebase.read("tools");
-    const items = [];
-
-    ref.forEach((snapshot) => {
-      const { values } = snapshot.data();
-      items.push(values);
-    });
-
-    const set = Array.from(new Set(items));
-
-    const list = set.map((item) => ({
-      label: item,
-      value: item,
-    }));
-
-    setTools(list);
-  };
-
-  const handleChange = async (e) => {
-    await firebase.uploadFile(e.target.files[0], setAttachment);
-  }
-
-  const formik = useFormik({
-    initialValues: {
-      type: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
-      title: "",
-      description: "",
-      contribuitionType: "",
-      link: "",
-    },
-    onSubmit: (values) => handleForm(values),
-  });
-
-  const handleAttachment = (type) => {
-    const attachmentIsEmpty = Object.keys(attachment).length === 0;
-
-    if (attachmentIsEmpty) return "";
-
-    const attachmentIsType = attachment.type.includes(type);
-    
-    if (!attachmentIsType) return "";
-
-    return attachment;
-  }
-
-  const handleRemove = async () => {
-    await firebase.removeFile(attachment, setAttachment);
-  }
-
-  const handleForm = async (values) => {
-    const unique_id = uuid();
-    const cod = unique_id.slice(0, 8);
-    const userId = localStorage.getItem("userId");
-
-    const arquivoResposta = handleAttachment("image");
-    const videoResposta = handleAttachment("video");
-
-    const body = {
-      cod,
-      contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
-      usuario: userId,
-      ferramenta: selectedTool.values,
-      tipoContribuicao: contribuitionType.values,
-      descricaoContribuicao: isQuestion ? "" : values.description,
-      descricaoResposta: isQuestion ? values.description : "",
-      arquivoResposta,
-      videoResposta,
-      aprovada: false,
-      rejeitada: false,
-      motivo: "",
-      link: values.link,
-      titulo: values.title,
-    };
-
-    await firebase.update('moderation', { values: body }, docId);
-    navigate("/home");
-  };
 
   const renderQuestionForm = () => {
     return (
@@ -159,7 +59,11 @@ const EditForm = () => {
           <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
+          <Uploader
+            attachment={attachment}
+            handleChange={handleChange}
+            handleRemove={handleRemove}
+          />
         </div>
       </>
     );
@@ -233,7 +137,11 @@ const EditForm = () => {
           <label htmlFor="file" className="col-sm-2 col-form-label">
             Arquivo ou video
           </label>
-          <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
+          <Uploader
+            attachment={attachment}
+            handleChange={handleChange}
+            handleRemove={handleRemove}
+          />
         </div>
       </>
     );
@@ -241,11 +149,43 @@ const EditForm = () => {
 
   return (
     <>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Rejeitar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Diga o motivo para rejeitar a contribuição</p>
+          <input
+            type="text"
+            className="form-control"
+            value={motive}
+            onChange={(e) => setMotive(e.target.value)}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Voltar
+          </Button>
+          {getBody(formik.values).rejeitada ? (
+            <Button variant="danger" onClick={handleRemove}>
+              Remover
+            </Button>
+          ) : (
+            <Button
+              variant="danger"
+              onClick={() => handleModeration(false)}
+            >
+              Rejeitar
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
       <Navbar />
       <div className="d-flex flex-column text-align-center align-items-center justify-content-center m-2">
         <h2>Curadoria: verificação de conteúdo</h2>
         <p>
-          Analise o conteúdo/questão e, se necessário, faça as devidas alterações
+          Analise o conteúdo/questão e, se necessário, faça as devidas
+          alterações
         </p>
       </div>
 
@@ -314,15 +254,36 @@ const EditForm = () => {
             </label>
           </div>
         </div>
-        <p>Descreva sua dúvida e, se desejar, insira um arquivo de apoio (imagem, video, etc)</p>
+        <p>
+          Descreva sua dúvida e, se desejar, insira um arquivo de apoio (imagem,
+          video, etc)
+        </p>
         {isQuestion ? renderQuestionForm() : renderContribuitionForm()}
-        <button
-          onClick={formik.handleSubmit}
-          type="button"
-          className="btn btn-primary"
-        >
-          Salvar alterações
-        </button>
+        <div className="d-flex flex-row">
+          <Button onClick={formik.handleSubmit} variant="primary">
+            Salvar alterações
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              handleShow();
+            }}
+            variant="danger"
+            className="ms-2"
+          >
+            Rejeitar
+          </Button>
+          <Button
+            className="ms-2"
+            variant="success"
+            onClick={(e) => {
+              e.preventDefault();
+              handleModeration(true);
+            }}
+          >
+            Aprovar
+          </Button>
+        </div>
       </form>
     </>
   );

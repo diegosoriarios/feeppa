@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
@@ -11,18 +10,6 @@ const ModerationPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState({});
   const [list, setList] = useState([]);
-  const [selectedIndex, setIndex] = useState(-1);
-  const [motive, setMotive] = useState("");
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setMotive("");
-    setShow(false);
-  };
-  const handleShow = (index) => {
-    if (list[index]?.motivo) setMotive(list[index]?.motivo);
-    setShow(true);
-  };
 
   const firebase = useFirebase();
   const navigate = useNavigate();
@@ -62,165 +49,10 @@ const ModerationPage = () => {
     setIsLoading(false);
   };
 
-  const generateBody = (question, isApproved) => ({
-    cod: question.cod,
-    contribuicao: question.contribuicao,
-    usuario: question.usuario,
-    ferramenta: question.ferramenta,
-    tipoContribuicao: question.contribuitionType || "",
-    descricaoContribuicao: question.descricaoContribuicao || "",
-    linkContribuicao: question.link || "",
-    arquivoContribuicao:
-      question.contribuicao === POST_TYPE.CONTRIBUTION
-        ? question.arquivoResposta || ""
-        : "",
-    descricaoResposta: question.descricaoResposta || "",
-    arquivoResposta:
-      question.contribuicao === POST_TYPE.QUESTION
-        ? question.arquivoResposta || ""
-        : "",
-    videoResposta: question.attachment || "",
-    aprovada: isApproved,
-    rejeitada: !isApproved,
-    motivo: motive,
-    titulo: question.titulo,
-    answers: [],
-  });
-
-  const incrementCounts = async () => {
-    let values = { ...user, curadoriaCount: user.curadoriaCount + 1 };
-
-    await firebase.incrementValue("user", { values }, user.doc);
-  };
-
-  const handleModeration = async (isApproved, index) => {
-    if (index < 0) return;
-    setIsLoading(true);
-
-    try {
-      const question = list[index];
-
-      const body = generateBody(question, isApproved);
-
-      if (body.rejeitada) return updateModeration(body);
-
-      addNewToolToFirebase(body.ferramenta);
-      await firebase.create("questions", body);
-
-      incrementCounts();
-      removeFromModerationList(list[index].cod);
-    } catch (e) {
-      setIsLoading(false);
-    } finally {
-      setIsLoading(false);
-      getItemsToModerate();
-    }
-  };
-
-  const addNewToolToFirebase = async (ferramenta) => {
-    const ref = await firebase.read("tools");
-    const items = [];
-
-    ref.forEach((snapshot) => {
-      const { values } = snapshot.data();
-      items.push({
-        id: values,
-        name: values,
-      });
-    });
-
-    const alreadyExists = items.filter((item) => item.name === ferramenta);
-
-    if (!alreadyExists.length) await firebase.create("tools", ferramenta);
-  };
-
-  const removeFromModerationList = async (id) => {
-    const docs = await firebase.find("moderation", id, "values.cod");
-    const items = [];
-
-    docs.forEach((doc) => {
-      items.push(doc.id);
-    });
-
-    await firebase.remove("moderation", items[0]);
-
-    navigate("/home");
-  };
-
-  const updateModeration = async (item) => {
-    const docs = await firebase.find("moderation", item.cod, "values.cod");
-    const items = [];
-
-    docs.forEach((doc) => {
-      items.push(doc.id);
-    });
-
-    await firebase.update("moderation", { values: item }, items[0]);
-    setIndex(-1);
-    handleClose();
-  };
-
-  const handleRemove = async () => {
-    setIsLoading(true);
-    try {
-      const item = list[selectedIndex];
-      const docs = await firebase.find("moderation", item.cod, "values.cod");
-      const items = [];
-
-      docs.forEach((doc) => {
-        items.push(doc.id);
-      });
-
-      await firebase.remove("moderation", items[0]);
-      removeItemFromList(item.cod);
-      setIndex(-1);
-      handleClose();
-    } catch (e) {
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const removeItemFromList = (id) => {
-    const newList = list.filter((item) => item.cod !== id);
-    setList(newList);
-  };
-
   if (isLoading) return <Loading />;
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Rejeitar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Diga o motivo para rejeitar a contribuição</p>
-          <input
-            type="text"
-            className="form-control"
-            value={motive}
-            onChange={(e) => setMotive(e.target.value)}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Voltar
-          </Button>
-          {list[selectedIndex]?.rejeitada ? (
-            <Button variant="danger" onClick={handleRemove}>
-              Remover
-            </Button>
-          ) : (
-            <Button
-              variant="danger"
-              onClick={() => handleModeration(false, selectedIndex)}
-            >
-              Rejeitar
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>
       <section>
         <Navbar />
         <div className="d-flex flex-column text-align-center align-items-center justify-content-center m-2">
@@ -283,29 +115,6 @@ const ModerationPage = () => {
                         )}
                       </div>
                     </a>
-                    <div>
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setIndex(index);
-                          handleShow(index);
-                        }}
-                        variant="danger"
-                      >
-                        Rejeitar
-                      </Button>
-                      <Button
-                        className="m-2"
-                        variant="success"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setIndex(index);
-                          handleModeration(true, index);
-                        }}
-                      >
-                        Aprovar
-                      </Button>
-                    </div>
                   </li>
                 </div>
               );
