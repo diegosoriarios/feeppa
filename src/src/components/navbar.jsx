@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const checkLogin = async () => {
     const userId = localStorage.getItem("userId");
-    if (!user & !!userId) {
+    if (!user && !!userId) {
       handleLogout();
     }
   }
