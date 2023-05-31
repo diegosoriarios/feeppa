@@ -88,6 +88,13 @@ const ListPage = () => {
     setList(searchList);
   }, [tool]);
 
+  const renderDescription = (text) => {
+    const TEXT_LIMIT = 75;
+    if (text.length >= TEXT_LIMIT) return text.substring(0, TEXT_LIMIT) + "...";
+
+    return text;
+  }
+
   if (isLoading) return <Loading />
 
   return (
@@ -188,8 +195,8 @@ const ListPage = () => {
                   key={question.cod}
                 >
                   <div>
-                    <h5 className="text-black">{question.titulo}</h5>
-                    <p className="text-black">{question.titulo}</p>
+                    <h5 className="text-black">{question.titulo} - {question.ferramenta}</h5>
+                    <p className="text-black">{renderDescription(question.descricaoResposta || question.descricaoContribuicao)}</p>
                     <span
                       className={`badge badge-pill ${
                         question.contribuicao === POST_TYPE.QUESTION

@@ -12,7 +12,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   getFirestore,
   query,
@@ -31,7 +30,7 @@ const VITE_APP_ID = "1:400572205493:web:618d23cc32edfe1dcbb1fc";
 const VITE_DATABASE_URL =
   "https://feeppa-727d7-default-rtdb.europe-west1.firebasedatabase.app/";
 
-export default () => {
+function useFirebase() {
   const [app, setApp] = useState(null);
 
   const firebaseConfig = {
@@ -67,10 +66,6 @@ export default () => {
       const user = signIn.user;
       return { token, user };
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.customData.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
     }
   };
 
@@ -83,7 +78,6 @@ export default () => {
 
   const read = async (table) => {
     try {
-      const app = initializeApp(firebaseConfig);
       const db = getFirestore();
       const snapshot = await getDocs(collection(db, table));
 
@@ -95,7 +89,6 @@ export default () => {
 
   const find = async (table, id, attribute = "id") => {
     try {
-      const app = initializeApp(firebaseConfig);
       const db = getFirestore();
       const dbRef = collection(db, table);
 
@@ -203,3 +196,5 @@ export default () => {
     removeFile,
   };
 };
+
+export default useFirebase;

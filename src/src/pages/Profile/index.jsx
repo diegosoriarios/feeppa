@@ -27,7 +27,6 @@ const ProfilePage = () => {
     });
     getRanking(items, userId);
     setIsLoading(false);
-    console.log(userId);
   };
 
   const getRanking = (allUsers, userId) => {

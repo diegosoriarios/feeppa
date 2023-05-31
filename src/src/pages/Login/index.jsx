@@ -59,7 +59,6 @@ const LoginPage = () => {
           navigate("/home");
         }).catch((e) => {});
       } else {
-        console.log(items);
         dispatch(saveUser(items[0].values));
         navigate("/home");
       }
@@ -69,10 +68,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+    <div className="d-flex flex-column justify-content-around align-items-center" style={{ height: "100vh" }}>
+      <div className="d-flex flex-column justify-content-around align-items-center">
+      <h2 className="m-5 text-center">Recursos de ajuda para linguagens de programação visual baseadas em blocos</h2>
+      <p>Utilize o botão a seguir para acessar o ambiente</p>
       <Link onClick={handleLogin} className="btn btn-primary">
         Acessar com o Google
       </Link>
+      </div>
+      <div></div>
     </div>
   );
 };

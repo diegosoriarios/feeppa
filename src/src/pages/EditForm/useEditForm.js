@@ -106,7 +106,7 @@ export function useEditForm () {
     const body = getBody(values);
 
     await firebase.update('moderation', { values: body }, docId);
-    navigate("/home");
+    navigate("/moderation");
   };
 
   const getBody = (values) => {

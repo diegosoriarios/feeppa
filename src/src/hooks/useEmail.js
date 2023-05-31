@@ -1,6 +1,6 @@
 import emailjs from "@emailjs/browser";
 
-export default () => {
+function useEmail() {
   const sendEmail = (values) => {
     const YOUR_SERVICE_ID = "YOUR_SERVICE_ID";
     const YOUR_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
@@ -16,3 +16,5 @@ export default () => {
 
   return { sendEmail }
 };
+
+export default useEmail;

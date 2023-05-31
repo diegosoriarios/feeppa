@@ -242,7 +242,7 @@ const Navbar = () => {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <a className="nav-link ms-4" onClick={handleLogout} href="#">
+              <a className="ms-4 btn btn-danger text-link" onClick={handleLogout} href="#">
                 Sair
               </a>
             </div>
