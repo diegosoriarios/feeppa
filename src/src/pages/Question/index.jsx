@@ -6,14 +6,18 @@ import Navbar from "../../components/navbar";
 import { POST_TYPE } from "../../utils/consts";
 import Thumbnail from "../../components/thumbnail";
 import Uploader from "../../components/uploader";
+import useEmail from "../../hooks/useEmail";
+import { useSelector } from "react-redux";
 
 const QuestionPage = () => {
   const [question, setQuestion] = useState({});
   const [attachment, setAttachment] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const user = useSelector((state) => state.auth.user);
   const { id } = useParams();
   const firebase = useFirebase();
   const navigate = useNavigate();
+  const email = useEmail();
 
   useEffect(() => {
     getQuestion();
@@ -55,6 +59,12 @@ const QuestionPage = () => {
       ...question,
       answers,
     };
+
+    email.sendEmail({
+      name: user.nome,
+      titulo: question.titulo,
+      to: user.email
+    })
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
     navigate(0);
