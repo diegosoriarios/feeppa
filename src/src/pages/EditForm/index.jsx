@@ -57,7 +57,7 @@ const EditForm = () => {
         </div>
         <div className="form-group row my-4">
           <label htmlFor="file" className="col-sm-2 col-form-label">
-            Arquivo ou video
+            Arquivo
           </label>
           <Uploader
             attachment={attachment}
@@ -135,7 +135,7 @@ const EditForm = () => {
         </div>
         <div className="form-group row my-4">
           <label htmlFor="file" className="col-sm-2 col-form-label">
-            Arquivo ou video
+            Arquivo
           </label>
           <Uploader
             attachment={attachment}

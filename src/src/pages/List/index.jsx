@@ -123,9 +123,9 @@ const ListPage = () => {
         </div>
 
         <hr className="hr" />
-
+        
+        <p className="m-2">Escolha a ferramenta e o tipo de recurso a visualizar:</p>
         <div className="m-2 d-flex flex-row justify-content-center align-items-center mb-4">
-          <h2 className="m-0 p-0">Filtro: </h2>
           <div className="input-group m-0 ">
             <div className="input-group-prepend ">
               <label className="input-group-text" htmlFor="inputGroupSelect01">
@@ -181,6 +181,9 @@ const ListPage = () => {
             </div>
           </div>
         </div>
+
+        <p className="m-2">Recursos disponíveis (clique no título para obter mais informações ou inserir um comentário)</p>
+
         {!!list?.length ? (
           <ul className="list-group">
             {list.map((question) => (

@@ -142,7 +142,7 @@ const FormPage = () => {
         </div>
         <div className="form-group row my-4">
           <label htmlFor="inputPassword" className="col-sm-2 col-form-label">
-            Arquivo ou video
+            Arquivo
           </label>
           <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>
@@ -216,7 +216,7 @@ const FormPage = () => {
         </div>
         <div className="form-group row my-4">
           <label htmlFor="file" className="col-sm-2 col-form-label">
-            Arquivo ou video
+            Arquivo
           </label>
           <Uploader attachment={attachment} handleChange={handleChange} handleRemove={handleRemove} />
         </div>

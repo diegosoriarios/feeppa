@@ -63,8 +63,8 @@ const QuestionPage = () => {
     email.sendEmail({
       name: user.nome,
       titulo: question.titulo,
-      to: user.email
-    })
+      to: user.email,
+    });
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
     navigate(0);
@@ -82,8 +82,10 @@ const QuestionPage = () => {
           <div className="bg-white comment-section">
             <div className="d-flex flex-row user">
               <div className="d-flex flex-column p-2">
-              <p className="comment-content text-uppercase text-secondary m-0">
-                  {question?.contribuicao === POST_TYPE.CONTRIBUTION ? "Contribuição" : "Questão"}
+                <p className="comment-content text-uppercase text-secondary m-0">
+                  {question?.contribuicao === POST_TYPE.CONTRIBUTION
+                    ? "Contribuição"
+                    : "Questão"}
                 </p>
                 <h2 className="name font-weight-bold">{question?.titulo}</h2>
               </div>
@@ -103,7 +105,9 @@ const QuestionPage = () => {
               <Thumbnail
                 setIsFullScreen={setIsFullScreen}
                 isFullScreen={isFullScreen}
-                file={question?.arquivoResposta || question?.arquivoContribuicao}
+                file={
+                  question?.arquivoResposta || question?.arquivoContribuicao
+                }
               />
               {question?.linkContribuicao && (
                 <a
@@ -134,16 +138,24 @@ const QuestionPage = () => {
                   ))}
                   {answer?.anexo?.type?.includes("image") && (
                     <Thumbnail
-                    setIsFullScreen={setIsFullScreen}
-                    isFullScreen={isFullScreen}
-                    file={answer?.anexo}
-                  />
+                      setIsFullScreen={setIsFullScreen}
+                      isFullScreen={isFullScreen}
+                      file={answer?.anexo}
+                    />
                   )}
                 </div>
               ))}
             </div>
 
-            <h3 className="border-top mt-4 pt-2">Descrição</h3>
+            <hr className="hr" />
+
+           <div className="mt-4 mb-2 d-flex flex-row pt-2 align-items-center justify-content-around">
+              <h3 className="me-2">Descrição</h3>
+              <p className="m-0">
+                Descreva sua contribuição/resposta em textos pequenos de
+                preferência no formato passo a passo
+              </p>
+            </div>
             <div>
               <Formik
                 initialValues={initialValues}
@@ -185,9 +197,16 @@ const QuestionPage = () => {
                         </>
                       )}
                     </FieldArray>
+                    <p className="mt-2">
+                      Se desejar, insira um arquivo de apoio (imagem, video,
+                      etc)
+                    </p>
                     <div className="mb-3 d-flex flex-row align-items-center">
-                      <label htmlFor="formFile" className="form-label me-4 mt-2">
-                        Arquivo ou video
+                      <label
+                        htmlFor="formFile"
+                        className="form-label me-4 mt-2"
+                      >
+                        Arquivo
                       </label>
                       <Uploader
                         attachment={attachment}
