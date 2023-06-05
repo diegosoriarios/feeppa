@@ -36,6 +36,7 @@ export function useEditForm () {
         values.descricaoResposta || values.descricaoContribuicao || "",
       contribuitionType: values.tipoContribuicao,
       link: values.link || "",
+      created_at: values.created_at,
     };
     setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
     setDocId(items[0].id)
@@ -132,6 +133,7 @@ export function useEditForm () {
       motivo: "",
       link: values.link,
       titulo: values.title,
+      created_at: values.created_at,
     };
 
     return body;

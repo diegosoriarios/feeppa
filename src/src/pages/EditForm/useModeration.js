@@ -48,7 +48,7 @@ export function useModeration(post) {
     motivo: motive,
     titulo: question.titulo,
     answers: [],
-    created_at: question.created_at,
+    created_at: question.created_at || "",
   });
 
   const incrementCounts = async () => {
