@@ -54,8 +54,8 @@ const QuestionPage = () => {
         passos: values.answerSteps,
         anexo: attachment,
         usuario: localStorage.getItem("userName"),
+        created_at
       },
-      created_at
     ];
 
     const newQuestion = {
