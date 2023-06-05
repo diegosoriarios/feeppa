@@ -13,7 +13,7 @@ const Thumbnail = ({file, setIsFullScreen, isFullScreen}) => {
           <Lightbox
             image={file.url}
             title={file.name || ""}
-            style={{ width: "100px" }}
+            style={{ width: "250px" }}
             onClose={() => setIsFullScreen(false)}
           />
         ) : (
@@ -25,7 +25,7 @@ const Thumbnail = ({file, setIsFullScreen, isFullScreen}) => {
             <img
               src={file.url}
               alt="image"
-              style={{ width: "100px" }}
+              style={{ width: "250px" }}
             />
           </div>
         )}

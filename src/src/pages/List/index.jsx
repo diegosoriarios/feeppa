@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar";
 import useFirebase from "../../hooks/useFirebase";
 import { POST_TYPE } from "../../utils/consts";
 import Loading from "../../components/loading";
+import { getPostDate } from "../../utils/date";
 
 let questions = [];
 
@@ -200,6 +201,7 @@ const ListPage = () => {
                   <div>
                     <h5 className="text-black">{question.titulo} - {question.ferramenta}</h5>
                     <p className="text-black">{renderDescription(question.descricaoResposta || question.descricaoContribuicao)}</p>
+                    <p>{getPostDate(question.created_at)}</p>
                     <span
                       className={`badge badge-pill ${
                         question.contribuicao === POST_TYPE.QUESTION
