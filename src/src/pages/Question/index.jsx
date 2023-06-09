@@ -54,7 +54,7 @@ const QuestionPage = () => {
         passos: values.answerSteps,
         anexo: attachment,
         usuario: localStorage.getItem("userName"),
-        created_at
+        created_at,
       },
     ];
 
@@ -133,7 +133,9 @@ const QuestionPage = () => {
             <div className="d-flex align-items-start flex-column mh-4">
               {question?.answers?.map((answer) => (
                 <div className="card w-100 m-2 p-4">
-                  <h4>{answer?.usuario} - {getPostDate(answer?.created_at)}</h4>
+                  <h4>
+                    {answer?.usuario} - {getPostDate(answer?.created_at)}
+                  </h4>
                   {Object.entries(answer.passos).map((key) => (
                     <span className="card-body">
                       {Object.values(key[1])[0]}
@@ -152,7 +154,7 @@ const QuestionPage = () => {
 
             <hr className="hr" />
 
-           <div className="mt-4 mb-2 d-flex flex-row pt-2 align-items-center justify-content-around">
+            <div className="mt-4 mb-2 d-flex flex-row pt-2 align-items-center justify-content-around">
               <h3 className="me-2">Descrição</h3>
               <p className="m-0">
                 Descreva sua contribuição/resposta em textos pequenos de

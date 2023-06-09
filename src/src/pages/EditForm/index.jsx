@@ -14,6 +14,7 @@ const EditForm = () => {
     contribuitionType,
     attachment,
     formik,
+    isRejected,
     setContribuitionType,
     setSelectedTool,
     setIsQuestion,
@@ -24,14 +25,8 @@ const EditForm = () => {
     getBody,
   } = useEditForm();
 
-  const {
-    motive,
-    setMotive,
-    show,
-    handleShow,
-    handleModeration,
-    handleClose,
-  } = useModeration(getBody(formik.values));
+  const { motive, setMotive, show, handleShow, handleModeration, handleClose } =
+    useModeration(getBody(formik.values));
 
   useEffect(() => {
     getToolList();
@@ -166,18 +161,9 @@ const EditForm = () => {
           <Button variant="secondary" onClick={handleClose}>
             Voltar
           </Button>
-          {getBody(formik.values).rejeitada ? (
-            <Button variant="danger" onClick={handleRemove}>
-              Remover
-            </Button>
-          ) : (
-            <Button
-              variant="danger"
-              onClick={() => handleModeration(false)}
-            >
-              Rejeitar
-            </Button>
-          )}
+          <Button variant="danger" onClick={() => handleModeration(false)}>
+            Rejeitar
+          </Button>
         </Modal.Footer>
       </Modal>
       <Navbar />
@@ -263,16 +249,22 @@ const EditForm = () => {
           <Button onClick={formik.handleSubmit} variant="primary">
             Salvar alterações
           </Button>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              handleShow();
-            }}
-            variant="danger"
-            className="ms-2"
-          >
-            Rejeitar
-          </Button>
+          {isRejected ? (
+            <Button variant="danger" className="ms-2" onClick={handleRemove}>
+              Remover
+            </Button>
+          ) : (
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                handleShow();
+              }}
+              variant="danger"
+              className="ms-2"
+            >
+              Rejeitar
+            </Button>
+          )}
           <Button
             className="ms-2"
             variant="success"

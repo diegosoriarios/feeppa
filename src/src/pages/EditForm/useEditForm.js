@@ -12,6 +12,7 @@ export function useEditForm () {
   const [contribuitionType, setContribuitionType] = useState("");
   const [attachment, setAttachment] = useState({});
   const [docId, setDocId] = useState("");
+  const [isRejected, setIsRejected] = useState(false);
 
   const { state } = useLocation();
 
@@ -49,6 +50,7 @@ export function useEditForm () {
       values: values.tipoContribuicao,
       label: values.tipoContribuicao,
     });
+    setIsRejected(values.rejeitada);
 
     formik.setValues(initialItems, false);
   };
@@ -146,6 +148,7 @@ export function useEditForm () {
     contribuitionType,
     attachment,
     formik,
+    isRejected,
     setContribuitionType,
     setSelectedTool,
     setIsQuestion,

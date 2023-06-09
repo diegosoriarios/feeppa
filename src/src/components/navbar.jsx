@@ -214,6 +214,13 @@ const Navbar = () => {
                 </a>
               }
               <a
+                className="nav-link border-start"
+                href="#"
+                onClick={() => navigate("..", { replace:  true })}
+              >
+                Voltar
+              </a>
+              <a
                 className="nav-link btn btn-primary text-white"
                 href="#"
                 onClick={() => navigate("/form")}
