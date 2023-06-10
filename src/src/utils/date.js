@@ -3,6 +3,13 @@ export const getPostDate = (date) => {
 
   const value = new Date(date.seconds * 1000);
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+  if (!date.seconds) {
+    var datum = Date.parse(date);
+    const formattedDate = new Intl.DateTimeFormat('pt-BR', options).format(datum);
+    return formattedDate;
+  }
+  
   const formattedDate = new Intl.DateTimeFormat('pt-BR', options).format(value);
   return formattedDate;
 }

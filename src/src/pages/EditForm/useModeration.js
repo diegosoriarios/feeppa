@@ -121,7 +121,7 @@ export function useModeration(post) {
     handleClose();
   };
 
-  const handleRemove = async () => {
+  const handleRemovePost = async () => {
     setIsLoading(true);
     try {
       const docs = await firebase.find("moderation", state.id, "values.cod");
@@ -152,6 +152,6 @@ export function useModeration(post) {
     handleClose,
     generateBody,
     incrementCounts,
-    handleRemove,
+    handleRemovePost,
   };
 }

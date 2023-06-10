@@ -9,8 +9,10 @@ import Uploader from "../../components/uploader";
 import useEmail from "../../hooks/useEmail";
 import { useSelector } from "react-redux";
 import { getPostDate } from "../../utils/date";
+import Loading from "../../components/loading";
 
 const QuestionPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [question, setQuestion] = useState({});
   const [attachment, setAttachment] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -36,6 +38,7 @@ const QuestionPage = () => {
     });
 
     setQuestion(items[0]);
+    setIsLoading(false);
   };
 
   const handleChange = async (e) => {
@@ -47,6 +50,7 @@ const QuestionPage = () => {
   };
 
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     const created_at = new Date();
     const answers = [
       ...question?.answers,
@@ -63,19 +67,23 @@ const QuestionPage = () => {
       answers,
     };
 
-    email.sendEmail({
-      name: user.nome,
-      titulo: question.titulo,
-      to: user.email,
-    });
+    
+    // email.sendEmail({
+    //   name: user.nome,
+    //   titulo: question.titulo,
+    //   to: user.email,
+    // });
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
-    navigate(0);
+    setQuestion(newQuestion);
+    setIsLoading(false);
   };
 
   const handleRemove = async () => {
     await firebase.removeFile(attachment, setAttachment);
   };
+
+  if (isLoading) return <Loading />
 
   return (
     <>
@@ -131,13 +139,13 @@ const QuestionPage = () => {
             </div>
 
             <div className="d-flex align-items-start flex-column mh-4">
-              {question?.answers?.map((answer) => (
-                <div className="card w-100 m-2 p-4">
+              {question?.answers?.map((answer, index) => (
+                <div className="card w-100 m-2 p-4" key={index}>
                   <h4>
                     {answer?.usuario} - {getPostDate(answer?.created_at)}
                   </h4>
                   {Object.entries(answer.passos).map((key) => (
-                    <span className="card-body">
+                    <span className="card-body" key={key}>
                       {Object.values(key[1])[0]}
                     </span>
                   ))}

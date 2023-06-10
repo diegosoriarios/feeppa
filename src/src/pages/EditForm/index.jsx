@@ -25,7 +25,7 @@ const EditForm = () => {
     getBody,
   } = useEditForm();
 
-  const { motive, setMotive, show, handleShow, handleModeration, handleClose } =
+  const { motive, setMotive, show, handleShow, handleModeration, handleClose, handleRemovePost } =
     useModeration(getBody(formik.values));
 
   useEffect(() => {
@@ -250,7 +250,7 @@ const EditForm = () => {
             Salvar alterações
           </Button>
           {isRejected ? (
-            <Button variant="danger" className="ms-2" onClick={handleRemove}>
+            <Button variant="danger" className="ms-2" onClick={handleRemovePost}>
               Remover
             </Button>
           ) : (

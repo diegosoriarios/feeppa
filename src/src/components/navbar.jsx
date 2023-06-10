@@ -214,18 +214,18 @@ const Navbar = () => {
                 </a>
               }
               <a
-                className="nav-link border-start"
-                href="#"
-                onClick={() => navigate("..", { replace:  true })}
-              >
-                Voltar
-              </a>
-              <a
                 className="nav-link btn btn-primary text-white"
                 href="#"
                 onClick={() => navigate("/form")}
               >
                 Inserir conteúdo
+              </a>
+              <a
+                className="nav-link btn btn-primary text-white ms-2"
+                href="#"
+                onClick={() => navigate("..", { replace:  true })}
+              >
+                Voltar
               </a>
             </div>
             <div className="d-flex flex-row justify-content-between align-items-center">

@@ -8,7 +8,7 @@ const Thumbnail = ({file, setIsFullScreen, isFullScreen}) => {
 
   if (file?.type.includes("image")) {
     return (
-      <p>
+      <div>
         {isFullScreen ? (
           <Lightbox
             image={file.url}
@@ -29,7 +29,7 @@ const Thumbnail = ({file, setIsFullScreen, isFullScreen}) => {
             />
           </div>
         )}
-      </p>
+      </div>
     );
   }
 };
