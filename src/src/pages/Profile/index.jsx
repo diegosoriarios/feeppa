@@ -25,6 +25,7 @@ const ProfilePage = () => {
         setUser(doc.data().values);
       }
     });
+    console.log(items);
     getRanking(items, userId);
     setIsLoading(false);
   };

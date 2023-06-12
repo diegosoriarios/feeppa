@@ -116,9 +116,9 @@ const ListPage = () => {
             />
             <button
               className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
+              onClick={(e) => {e.preventDefault()}}
             >
-              Search
+              Pesquisar
             </button>
           </form>
         </div>
@@ -201,7 +201,7 @@ const ListPage = () => {
                   <div>
                     <h5 className="text-black">{question.titulo} - {question.ferramenta}</h5>
                     <p className="text-black">{renderDescription(question.descricaoResposta || question.descricaoContribuicao)}</p>
-                    <p>{getPostDate(question.created_at)}</p>
+                    <p>{getPostDate(question.created_at)} - {question.usuario}</p>
                     <span
                       className={`badge badge-pill ${
                         question.contribuicao === POST_TYPE.QUESTION

@@ -115,7 +115,7 @@ export function useEditForm () {
   const getBody = (values) => {
     const unique_id = uuidv4();
     const cod = unique_id.slice(0, 8);
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userName");
 
     const arquivoResposta = handleAttachment("image");
     const videoResposta = handleAttachment("video");

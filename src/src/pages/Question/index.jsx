@@ -67,15 +67,15 @@ const QuestionPage = () => {
       answers,
     };
 
-    
-    // email.sendEmail({
-    //   name: user.nome,
-    //   titulo: question.titulo,
-    //   to: user.email,
-    // });
+    email.sendEmail({
+      name: user.nome,
+      titulo: question.titulo,
+      to: user.email,
+    });
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
     setQuestion(newQuestion);
+    setAttachment("");
     setIsLoading(false);
   };
 
