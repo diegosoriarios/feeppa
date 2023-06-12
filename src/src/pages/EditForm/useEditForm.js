@@ -38,6 +38,7 @@ export function useEditForm () {
       contribuitionType: values.tipoContribuicao,
       link: values.link || "",
       created_at: values.created_at,
+      usuario: values.usuario
     };
     setIsQuestion(values.contribuicao === POST_TYPE.QUESTION);
     setDocId(items[0].id)
@@ -85,6 +86,7 @@ export function useEditForm () {
       description: "",
       contribuitionType: "",
       link: "",
+      usuario: ""
     },
     onSubmit: (values) => handleForm(values),
   });
@@ -123,7 +125,7 @@ export function useEditForm () {
     const body = {
       cod,
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
-      usuario: userId,
+      usuario: values.usuario,
       ferramenta: selectedTool.values,
       tipoContribuicao: contribuitionType.values,
       descricaoContribuicao: isQuestion ? "" : values.description,

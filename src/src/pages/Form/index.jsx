@@ -104,7 +104,7 @@ const FormPage = () => {
   const handleForm = async (values) => {
     const unique_id = uuid();
     const cod = unique_id.slice(0, 8);
-    const userId = localStorage.getItem("userId");
+    const userName = localStorage.getItem("userName");
 
     const arquivoResposta = handleAttachment("image");
     const videoResposta = handleAttachment("video");
@@ -112,7 +112,7 @@ const FormPage = () => {
     const body = {
       cod,
       contribuicao: isQuestion ? POST_TYPE.QUESTION : POST_TYPE.CONTRIBUTION,
-      usuario: userId,
+      usuario: userName,
       ferramenta: selectedTool.value,
       tipoContribuicao: contribuitionType.value || "",
       descricaoContribuicao: isQuestion ? "" : values.description,
