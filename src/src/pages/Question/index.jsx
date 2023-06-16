@@ -49,6 +49,24 @@ const QuestionPage = () => {
     answerSteps: [""],
   };
 
+  const getEmailByName = async (name) => {
+    const docs = await firebase.find("user", name, "values.nome");
+
+    const items = [];
+
+    if (docs) {
+      docs.forEach((doc) => {
+        items.push(doc.data());
+      });
+    }
+
+    if (!items.length) {
+      return items[0].email;
+    }
+
+    return null;
+  };
+
   const handleSubmit = async (values) => {
     setIsLoading(true);
     const created_at = new Date();
@@ -67,11 +85,15 @@ const QuestionPage = () => {
       answers,
     };
 
-    email.sendEmail({
-      name: user.nome,
-      titulo: question.titulo,
-      to: user.email,
-    });
+    const to = getEmailByName(user.nome);
+
+    if (to) {
+      email.sendEmail({
+        name: user.nome,
+        titulo: question.titulo,
+        to,
+      });
+    }
 
     await firebase.update("questions", { values: newQuestion }, question?.id);
     setQuestion(newQuestion);
@@ -83,7 +105,7 @@ const QuestionPage = () => {
     await firebase.removeFile(attachment, setAttachment);
   };
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <>
