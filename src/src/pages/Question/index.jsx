@@ -61,10 +61,10 @@ const QuestionPage = () => {
     }
 
     if (!items.length) {
-      return items[0].email;
+      return null;
     }
 
-    return null;
+    return items[0].values.email;
   };
 
   const handleSubmit = async (values) => {
@@ -85,7 +85,7 @@ const QuestionPage = () => {
       answers,
     };
 
-    const to = getEmailByName(user.nome);
+    const to = await getEmailByName(question.usuario);
 
     if (to) {
       email.sendEmail({
